@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanWay Solutions — Hogyan dolgozunk</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+
+  /* ── SHARED BRAND VARIABLES ── */
+  :root {
+    --cw-blue:        #02378F;
+    --cw-blue-mid:    #0185E4;
+    --cw-blue-light:  #E8F2FD;
+    --cw-green:       #006E46;
+    --cw-green-mid:   #5DB327;
+    --cw-green-light: #96CC22;
+    --cw-green-bg:    #EDF7E6;
+    --cw-gray:        #5A6068;
+    --cw-gray-light:  #F2F3F4;
+    --cw-gray-mid:    #E2E4E6;
+    --text-primary:   #111827;
+    --text-secondary: #4B5563;
+    --text-hint:      #9CA3AF;
+  }
+  html { overflow-x: hidden; }
+  body { font-family: 'Inter', sans-serif; background-color: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* ── NAV ── */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; position: relative; }
+  .nav-link:not(.btn-nav-cta)::after { content: ''; position: absolute; bottom: -4px; left: 16px; right: 16px; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .nav-link:not(.btn-nav-cta):hover::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* Mobil nav */
+  @media (max-width: 991.98px) {
+    .navbar { min-height: 64px; }
+    .navbar-collapse { background: var(--cw-blue); border-radius: 0 0 16px 16px; padding: 8px 0 16px; margin: 0 -12px; }
+    .navbar-collapse .navbar-nav { padding: 0 8px; }
+    .navbar-collapse .nav-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar-collapse .nav-item:last-of-type { border-bottom: none; }
+    .navbar-collapse .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 16px !important; font-weight: 500; padding: 14px 16px !important; display: block; }
+    .navbar-collapse .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    .navbar-collapse .nav-link:not(.btn-nav-cta)::after { display: none; }
+    .navbar-collapse .nav-link.active { color: #fff !important; font-weight: 700; }
+    .navbar-collapse .btn-nav-cta { background: var(--cw-green-mid) !important; color: #fff !important; margin: 12px 16px 0; padding: 14px 22px !important; font-size: 16px !important; border-radius: 8px; text-align: center; display: block; width: calc(100% - 32px); }
+    .navbar-collapse .btn-nav-cta:hover { background: var(--cw-green) !important; transform: none; }
+    .navbar-toggler { border: none; padding: 8px; }
+    .navbar-toggler:focus { box-shadow: none; }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2302378F' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  }
+
+  /* ── SHARED COMPONENTS ── */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* Buttons */
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+  .btn-cw-ghost { color: var(--cw-blue); background: transparent; border: 2px solid transparent; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; padding: 11px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; transition: gap .2s, border-color .2s, background .2s; }
+  .btn-cw-ghost:hover { gap: 10px; color: var(--cw-blue); border-color: var(--cw-blue); background: transparent; }
+
+  /* Footer */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+
+  /* Mobil responsive */
+  @media (max-width: 767.98px) {
+    .section-title { font-size: 24px; }
+    .cta-banner { padding: 28px 20px; border-radius: 16px; }
+    .cta-banner h2 { font-size: 24px; }
+    .cta-banner p { font-size: 14px; }
+    .cta-banner::before, .cta-banner::after { display: none; }
+    .site-footer .row { text-align: center; }
+    .footer-contact { margin: 8px 0; }
+    .footer-contact a { display: block; margin: 0 0 4px !important; }
+  }
+  @media (max-width: 575.98px) {
+    .btn-cw-primary, .btn-cw-ghost { font-size: 16px; padding: 11px 20px; }
+  }
+
+  
+  body { font-family: 'Inter', sans-serif; background: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* NAV */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .navbar-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-way   { color: var(--cw-green-mid); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-sol   { color: var(--cw-gray); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; margin-left: 3px; vertical-align: middle; font-family: 'Montserrat', sans-serif; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* SHARED */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+
+  /* PAGE HERO */
+  .page-hero { background: var(--cw-gray-light); padding: 64px 0 48px; }
+  .page-hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--cw-green-bg); border-radius: 100px; padding: 5px 14px; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: var(--cw-green); }
+  .page-hero-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cw-green-mid); }
+  .page-hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+  .page-hero p { font-size: 18px; color: var(--text-secondary); line-height: 1.75; max-width: 600px; }
+
+  /* STATS */
+  .stat-card { background: #fff; border-radius: 14px; border: 1px solid var(--cw-gray-mid); padding: 20px 22px; text-align: left; height: 100%; display: flex; align-items: center; gap: 16px; }
+  .stat-card-icon { width: 72px; height: 72px; border-radius: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; font-size: 24px; }
+  .stat-card-body { flex: 1; }
+  .stat-card-val { font-family: 'Montserrat', sans-serif; font-size: 24px; font-weight: 800; color: var(--cw-blue); line-height: 1; margin-bottom: 5px; }
+  .stat-card-lbl { font-size: 12px; color: var(--text-hint); font-weight: 500; line-height: 1.4; }
+
+  /* TIMELINE */
+  .timeline-section { background: #fff; padding: 48px 0; }
+  .timeline { position: relative; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 22px;
+    top: 0; bottom: 0;
+    width: 2px;
+    background: var(--cw-gray-mid);
+    z-index: 0;
+  }
+  .timeline-item { display: grid; grid-template-columns: 44px 1fr; gap: 24px; margin-bottom: 0; position: relative; z-index: 1; }
+  .timeline-item:not(:last-child) { padding-bottom: 40px; }
+  .timeline-num {
+    width: 44px; height: 44px; border-radius: 50%;
+    background: #fff; border: 2px solid var(--cw-blue-mid);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px; font-weight: 800; color: var(--cw-blue);
+    flex-shrink: 0; z-index: 1;
+    transition: background .2s, color .2s;
+  }
+  .timeline-item:hover .timeline-num { background: var(--cw-blue); color: #fff; border-color: #fff; }
+  .timeline-body { background: var(--cw-gray-light); border-radius: 16px; padding: 24px 28px; border: 1.5px solid transparent; transition: border-color .2s; }
+  .timeline-item:hover .timeline-body { border-color: var(--cw-blue-light); }
+  .timeline-body h4 { font-size: 18px; font-weight: 800; margin-bottom: 8px; color: var(--text-primary); }
+  .timeline-body p { font-size: 16px; color: var(--text-secondary); line-height: 1.75; margin: 0; }
+
+  /* QUICK FACTS */
+  .facts-section { background: var(--cw-gray-light); padding: 48px 0; }
+
+  /* EMERGENCY */
+  .emergency-section { background: #fff; padding: 48px 0; }
+  .emergency-card { background: var(--cw-gray-light); border-radius: 16px; padding: 28px; height: 100%; }
+  .emergency-badge { display: inline-flex; align-items: center; gap: 7px; background: #FFF3E0; border-radius: 100px; padding: 8px 18px; margin-bottom: 16px; font-size: 18px; font-weight: 600; color: #E65100; }
+  .emergency-badge-dot { width: 7px; height: 7px; border-radius: 50%; background: #FF9800; }
+  .emergency-item { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 12px; }
+  .emergency-dot { width: 8px; height: 8px; border-radius: 50%; background: #FF9800; flex-shrink: 0; margin-top: 6px; }
+  .emergency-item span { font-size: 14px; color: var(--text-secondary); line-height: 1.5; }
+
+  /* CTA */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner { background: var(--cw-blue); border-radius: 24px; padding: 52px 56px; position: relative; overflow: hidden; }
+  .cta-banner::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  .cta-banner h2 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+
+
+  /* ── CTA BANNER ── */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner {
+    background: var(--cw-blue);
+    border-radius: 24px;
+    padding: 52px 56px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+  .cta-banner::after {
+    content: '';
+    position: absolute; bottom: -80px; right: 100px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+  .btn-cta-white {
+    background: var(--cw-green-mid); color: #fff;
+    border: 2px solid #fff; border-radius: 8px;
+    padding: 14px 30px; font-size: 16px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, transform .15s, box-shadow .15s;
+    position: relative; z-index: 2;
+  }
+  .btn-cta-white:hover { background: var(--cw-green); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+  /* FOOTER */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+  .footer-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+  .footer-brand .brand-way { color: var(--cw-green-mid); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp .45s ease forwards; }
+  .delay-1 { animation-delay: .1s; opacity: 0; }
+  .delay-2 { animation-delay: .2s; opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="cleanway_fooldal.html">
+      <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:46px; width:auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="cleanway_rolunk.html">Rólunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_szolgaltatasok.html">Szolgáltatások</a></li>
+        <li class="nav-item"><a class="nav-link active" href="cleanway_hogyan.html">Hogyan dolgozunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_kinek.html">Kinek ajánljuk?</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_geppark.html">Géppark</a></li>
+      </ul>
+      <a href="cleanway_kapcsolat.html" class="nav-link btn-nav-cta ms-2">Ajánlatot kérek →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8 fade-up">
+        <div class="page-hero-eyebrow"><span class="page-hero-eyebrow-dot"></span>Hogyan dolgozunk</div>
+        <h1>Átlátható folyamat — az első<br>kapcsolatfelvételtől a <span style="color:var(--cw-blue);">rendszeres munkáig</span></h1>
+        <p>Minden együttműködés egy rövid felméréssel indul, és előre egyeztetett ütemezéssel, stabil kapacitással folytatódik. Így a minőség kiszámítható és követhető.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUICK STATS -->
+<div style="background:#fff; border-top:1px solid var(--cw-gray-mid); border-bottom:1px solid var(--cw-gray-mid); padding:28px 0;">
+  <div class="container">
+    <div class="row g-3">
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:var(--cw-blue-light);"><img src="Villam.svg" alt="" style="width:56px;height:56px;filter:brightness(0) saturate(100%) invert(13%) sepia(94%) saturate(1352%) hue-rotate(204deg) brightness(97%) contrast(97%);"></div>
+          <div class="stat-card-body">
+            <div class="stat-card-val">24 órán belül</div>
+            <div class="stat-card-lbl">Ajánlatadás ismert paraméterek esetén</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:var(--cw-green-bg);"><?xml version="1.0" encoding="UTF-8"?>
+<svg width="56" height="56" style="flex-shrink:0;" id="Színtáradatok_réteg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 700 700">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: url(#linear-gradient9);
+      }
+
+      .st3 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st4 {
+        fill: url(#linear-gradient6);
+      }
+
+      .st5 {
+        fill: url(#linear-gradient8);
+      }
+
+      .st6 {
+        fill: url(#linear-gradient7);
+      }
+
+      .st7 {
+        fill: url(#linear-gradient5);
+      }
+
+      .st8 {
+        fill: url(#linear-gradient4);
+      }
+
+      .st9 {
+        fill: url(#linear-gradient11);
+      }
+
+      .st10 {
+        fill: url(#linear-gradient10);
+      }
+
+      .st11 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="498.12" y1="705.98" x2="581.08" y2="63.03" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#02378f"/>
+      <stop offset="1" stop-color="#0185e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="227.8" y1="671.11" x2="310.77" y2="28.15" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient2" x1="123.34" y1="657.63" x2="206.31" y2="14.67" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient3" x1="106.8" y1="655.49" x2="189.76" y2="12.53" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient4" x1="139.4" y1="659.7" x2="222.36" y2="16.74" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient5" x1="282.12" y1="678.11" x2="365.08" y2="35.16" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient6" x1="311.6" y1="681.92" x2="394.56" y2="38.96" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient7" x1="288.85" y1="678.98" x2="371.81" y2="36.02" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient8" x1="123.35" y1="657.63" x2="206.31" y2="14.67" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient9" x1="155.7" y1="661.8" x2="238.67" y2="18.84" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient10" x1="139.45" y1="659.71" x2="222.42" y2="16.75" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient11" x1="498.28" y1="706.01" x2="581.24" y2="63.05" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="st11" d="M543.81,610.54c-1.6,2.22-4.16,3.72-5.72,3.91-1.68.2-4.69-1.22-5.95-2.92-22.71-30.51-43.36-61.51-62.21-94.61-11.55-20.28-22.47-39.82-31.59-61.2-6.17-14.46-10.38-28.66-11.32-44.1-3.75-61.57,42.31-113.28,103.99-116.99,36.75-2.21,72.93,14.5,95.02,44.15,24.69,33.13,26.9,75.09,11.68,112.83-6.97,17.27-15.2,32.92-24.24,49.35-20.98,38.12-44.14,74.06-69.65,109.58ZM551.48,463.74c26.58-6.26,45.03-29.21,46.53-55.03,1.56-26.73-14.06-50.91-39.53-60.23-18.79-6.88-38.67-4.87-55.92,6.63-14.28,9.53-24.82,25.89-26.45,44.66-1.72,19.71,6.32,38.18,20.48,50.56,15.09,13.2,34.62,18.18,54.88,13.4Z"/>
+  <path class="st1" d="M90.74,96.62c-10.87,0-18.47,8.56-18.46,18.44l.11,462.46c0,11.87,11.05,19.44,21.66,19.43l358.05-.17c10.28,0,17.71-9.18,17.97-18.24l.79-27.58c4.18,8.49,11.55,15.02,14.55,24.16,4.68,14.27-9.31,39.2-36.95,39.2H92.14c-21.48,0-39.43-16.89-39.42-39.4l.18-460.96c0-19.22,16.8-34.99,35.49-35.01l296.18-.35c2.84,0,6.65,1.07,8.52,2.93l88.42,88.02c3.66,3.65,5.19,6.73,5.17,12.1l-.28,103.27-15.89,7.76-.07-98.08c0-2.23-1.64-4.08-3.78-4.08l-83.85-.06c-3.01,0-6.33-3.01-6.33-5.95l.02-83.75c0-1.68-1.82-4.25-3.95-4.25l-281.81.11ZM457.33,171.5l-62.03-61.67-.22,62.22,62.24-.55Z"/>
+  <path class="st0" d="M197.22,352.91c1.49-3.59,4.89-4.68,7.99-4.13,3.35.59,6.21,3.61,6.18,7.47l-.26,37.09c-.03,3.9-4.79,6.64-8.27,6.64h-80.91c-3.49.01-8.05-2.81-8.05-6.66l-.06-77.83c0-4.52,3.71-7.79,8.13-7.79l64.76.02c3.41,0,6.14,3.88,6.34,6.25.31,3.69-2.23,7.11-6.25,7.45l-58.32.16v64.51s68.69.06,68.69.06l.03-33.24Z"/>
+  <path class="st3" d="M197.14,224.19c.7-4.01,3.97-5.94,7.22-5.73,3.58.22,6.85,2.89,6.85,7.02l.07,36.05c.01,5.01-3.42,8.76-8.54,8.76l-80.66-.02c-6.09,0-8.3-4.76-8.3-9.76v-74.98c0-4.35,2.15-8.91,7.34-8.91l65.67-.02c3.74,0,6.74,3.49,6.88,6.47.16,3.44-2.22,6.25-5.94,7.24l-59.32.13.02,66.13,68.68-.02v-32.36Z"/>
+  <path class="st8" d="M197.26,480.13c1.43-3.97,5.17-5.36,8.87-4.45,3.09.76,5.32,3.96,5.31,7.74l-.09,34.28c-.01,3.92-3.39,7.61-7.56,7.61l-81.8.02c-3.91,0-8.08-3.12-8.08-7.08l-.04-75.95c0-3.91,2.76-7.92,7.17-7.92h65.83c3.45.02,6.36,3.98,6.51,6.71.19,3.54-2.59,6.42-6.5,7.12l-58.41.13-.1,63.11,68.89.12.02-31.43Z"/>
+  <path class="st7" d="M429,237.02h-177.24c-5.44.01-8.8-4.63-8.88-8.97-.08-4.58,3.74-8.4,9.19-8.4l177.04.05c5.02,0,8.35,4.85,8.37,8.3.04,4.76-2.51,7.92-8.48,9.01Z"/>
+  <path class="st4" d="M424.48,494.08l-173.28.06c-5.15,0-8.25-4.95-8.44-8.45-.27-4.95,3.57-8.85,9.21-8.85l168.6-.03c5.28,0,8.18,2.83,9.61,7.06.53,1.56.85,4.89.42,6.25-.49,1.56-3.31,3.95-6.11,3.96Z"/>
+  <path class="st6" d="M418.73,349.63l-5.9,15.85-160.8.1c-5.46,0-8.7-4.47-8.88-8.81s3.45-8.63,8.84-8.63h159.63c2.29,0,5.06.82,7.11,1.49Z"/>
+  <path class="st5" d="M157.69,245.11c-6.81-6.83-13.27-13.72-19.54-20.69-2.92-3.25-.7-9.11,1.75-11.14,9.04-7.49,15.41,7.83,22.45,12.17l49.31-43.11c3.5-3.06,7.26-3.59,11.24-1.02,2.59,1.67,6.06,7.6,2.36,10.89l-56.94,50.68c-2.52,2.25-7.18,5.69-10.64,2.21Z"/>
+  <path class="st2" d="M138.21,480.66c-2.97-3.22-.3-9.22,2.07-11.09,8.94-7.05,14.89,7.96,22.15,12.21l49.19-42.72c3.45-3,7.65-2.99,10.9-.58,2.81,2.09,5.62,7.73,2.15,10.77l-28.13,24.64-30.44,27.35c-3.2,2.88-7.52,1.49-9.96-1.16l-17.92-19.43Z"/>
+  <path class="st10" d="M156.29,373.59l-16.81-17.78c-3.1-3.28-3.23-7.68-.71-11.18,2.23-3.1,7.94-5.01,11.35-1.47l11.89,12.36,49.03-42.8c4.36-3.81,9.24-3.6,12.76.4,3.99,4.54,2.04,9.12-2.44,12.83-19.02,15.74-37.13,31.73-55.19,48.43-2.82,2.61-7.37,1.86-9.88-.8Z"/>
+  <path class="st9" d="M538.15,437.5c-20.55.65-35.35-16.33-33.74-35.55s19.12-32.43,38.52-28.86c16.55,3.04,28.15,17.35,27.03,33.71-1.14,16.56-13.78,30.14-31.8,30.71Z"/>
+</svg></div>
+          <div class="stat-card-body">
+            <div class="stat-card-val">Helyszínre szabott</div>
+            <div class="stat-card-lbl">Feladatlista és ütemezés minden helyszínhez</div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="stat-card">
+          <div class="stat-card-icon" style="background:var(--cw-green-bg);"><?xml version="1.0" encoding="UTF-8"?>
+<svg width="56" height="56" style="flex-shrink:0;" id="Színtáradatok_réteg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 700 700">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: url(#linear-gradient9);
+      }
+
+      .st3 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st4 {
+        fill: url(#linear-gradient6);
+      }
+
+      .st5 {
+        fill: url(#linear-gradient8);
+      }
+
+      .st6 {
+        fill: url(#linear-gradient7);
+      }
+
+      .st7 {
+        fill: url(#linear-gradient5);
+      }
+
+      .st8 {
+        fill: url(#linear-gradient4);
+      }
+
+      .st9 {
+        fill: url(#linear-gradient10);
+      }
+
+      .st10 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="460.6" y1="654.1" x2="465.79" y2="94.1" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#02378f"/>
+      <stop offset="1" stop-color="#0185e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="202.82" y1="651.71" x2="208" y2="91.71" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient2" x1="537.84" y1="654.81" x2="543.03" y2="94.82" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient3" x1="483.66" y1="654.31" x2="488.84" y2="94.32" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient4" x1="491.25" y1="654.38" x2="496.44" y2="94.39" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient5" x1="497.91" y1="654.44" x2="503.1" y2="94.45" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient6" x1="501.28" y1="654.47" x2="506.47" y2="94.48" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient7" x1="401.63" y1="653.55" x2="406.81" y2="93.56" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient8" x1="550.24" y1="654.93" x2="555.42" y2="94.93" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient9" x1="217.47" y1="651.85" x2="222.65" y2="91.85" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient10" x1="279.59" y1="652.42" x2="284.78" y2="92.43" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="st10" d="M629.56,594.75c6.32,0,13.64-4.08,13.65-10.47l.12-366.05-40.35-.08c3.62-5.46,3.98-10.66,1.11-15.94l26.14-.39-55.42-54.31-.27,42.72-15.81-.09-.28-53.18-275.22.1-.09,132.89-16.45,3.49-.06-138.42c0-10.13,9-14.66,18.02-14.66l279.48-.03c4.54,0,7.81.98,10.93,4.07l78.97,78.45c4.79,4.76,6.07,8.24,6.07,15.2l-.04,365.38c0,14.02-11.99,27.32-26.89,27.32l-342.48.05c-13.5,0-24-11.59-24.02-24.17l-.07-39.99,16.46-3.59.1,41.51c.01,5.85,4.3,10.22,10.55,10.22l335.87-.05Z"/>
+  <path class="st1" d="M85.94,561.68c-4.76.96-8.44.51-12.22-1.83-3.31-2.05-4.16-5.86-5.17-10.45l-42.62-193.75c-1.55-7.04,4.03-14.56,11.04-15.94l114.92-22.7,173.4-34.33c6.34-1.26,13.64,2.64,15.13,9.36l43.36,196.07c1.49,6.74-1.01,13.97-8.38,15.45l-289.47,58.11ZM305.84,501.58l61.23-12.69-13.95-64.08-27.88-125.84-282.25,55.8,16.66,77.83,24.6,113.49,221.58-44.51Z"/>
+  <path class="st0" d="M577.28,238.12c1.03-2.89,3.98-4.45,6.51-4.68,2.16-.2,7.27,1.46,7.28,4.4l.15,41.97c.01,3.61-3.43,6.26-6.95,6.26h-84.87c-5.05-.01-7.3-3.85-7.3-8.3v-72.74c0-4.38,6.46-4.64,9.07-4.64l54.4-.07c4.15,0,7.54,2.07,7.67,6.07s-3.28,7.68-7.87,7.09l-49.63.08.07,58.98,71.5-.17-.02-34.25Z"/>
+  <path class="st3" d="M584.99,329.34l-195.42.08c-4.75,0-7.8-2.3-8.08-6.27s2.25-7.51,7.1-7.51h196.53c4.24-.01,6.7,3.48,6.86,6.62.2,3.69-2.39,7.07-6.99,7.08Z"/>
+  <path class="st8" d="M586.02,387.34l-185.17.03c-3.71,0-5.59-4.67-5.43-7.12.23-3.43,2.79-6.49,7.11-6.49h182.59c4.04.01,6.79,3.24,7.03,6.51.19,2.62-2.19,7.07-6.13,7.07Z"/>
+  <path class="st7" d="M585.15,445.31l-170.59.05c-4.57,0-7.07-3.72-6.99-7.13.1-4.34,3.51-6.44,7.83-6.44l49.07.04,121.6.04c3.93,0,6.43,4.02,6.17,7.1-.28,3.29-2.93,6.33-7.09,6.34Z"/>
+  <path class="st4" d="M585.35,503.08l-164.78.07c-4.35,0-7.16-2.65-7.41-6.1-.26-3.63,2.05-7.49,6.42-7.49h166.53c3.79,0,6.16,3.98,6.24,6.54.1,3.38-2.06,6.98-6.99,6.98Z"/>
+  <path class="st6" d="M473.32,256.96l-134.78.03c-4.55,0-7.64-1.88-8.36-5.74s1.4-8.68,6.36-8.68l137.78-.12c4.52,0,6.59,4.55,6.36,7.79-.25,3.46-3.02,6.73-7.36,6.73Z"/>
+  <path class="st5" d="M515.51,242.12c-3.04-3.32-.75-8.5,1.95-10.34,3.42-2.33,7.66-2.03,10.77,1.12l9.64,9.76,43.46-41.69c3.15-3.03,8.68-1.75,10.73.41,3.37,3.56,3.03,8.42-.55,11.8l-49.26,46.48c-2.81,2.66-6.92,2.76-9.76-.04-5.75-5.66-11.24-11.25-16.98-17.51Z"/>
+  <path class="st2" d="M344.06,471.53c1.04,4.94-2.82,9.44-7.51,10.38l-76.29,15.37-153.84,30.87c-5.16,1.03-8.64-2.81-9.45-6.95-2.06-10.49-5.65-13.47-1.05-20.43l65.48-99.25c5.4-8.18,18.05-12.22,26.61-6.01l59.96,43.41c1.13.82,2.89,1.74,3.86,1.79,4.1.21,10.02-13.38,12.17-17.87,4.54-9.5,16.38-13.45,25.45-6.81l45.91,33.59c3.23,2.36,5.41,6.24,6.17,9.88l2.52,12.04ZM176.83,444.66c5.92-7.24,10.02-13.84,14.34-21.45s-8.37-13.89-12.95-14.94c-3.61-.83-7.26,2.04-9.23,5.05-17.56,26.75-32.21,54.37-46.14,83.3-.31.65-.32,2.66.28,2.92s2.41-.11,2.95-.62c17.97-16.92,34.86-34.84,50.74-54.26ZM290.11,442.35c1.14-1.29,2.28-4.45,1.82-5.8-2.08-6.06-15.12-11.78-18.99-5.29-7.69,12.9-13.37,27.94-18.89,41.57-.4.99.25,3.48,1.02,3.35,5.46-.92,29.63-27.69,35.04-33.82Z"/>
+  <path class="st9" d="M294.2,373.88c-9.1,5.68-19.97,4.32-26.78-2.47-6.84-6.82-8.74-17.56-3.13-25.84,7.72-11.38,22.45-13.2,32.42-4.45s9.5,25.27-2.51,32.75Z"/>
+</svg></div>
+          <div class="stat-card-body">
+            <div class="stat-card-val">Dokumentált</div>
+            <div class="stat-card-lbl">Fotós/írásos visszaigazolás igény szerint</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <p class="section-label">Az együttműködés lépései</p>
+        <h2 class="section-title">5 lépéses folyamat</h2>
+        <p class="section-sub">Az első kapcsolatfelvételtől a rendszeres munkavégzésig minden lépés átlátható és egyeztetett.</p>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-8">
+        <div class="timeline">
+
+          <div class="timeline-item">
+            <div class="timeline-num">1</div>
+            <div class="timeline-body">
+              <h4>Ajánlatadás</h4>
+              <p>Ha a terület adottságai és a feladatok paraméterei rendelkezésre állnak — méretek, gyakoriság, elvárt szolgáltatási elemek — 24 órán belül megküldjük az ajánlatot. Ha helyszíni bejárás szükséges, a bejárást követően rövid határidővel készítjük el a végleges árazást.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-num">2</div>
+            <div class="timeline-body">
+              <h4>Felmérés és feladatlista</h4>
+              <p>Minden új helyszínnél rövid felmérés után összeállítjuk a helyszínre szabott feladatlistát, az elvárt gyakoriságot és a kritikus pontokat — vizesblokkok, bejáratok, nagy forgalmú zónák. Ehhez igazítjuk az ütemezést és az erőforrást.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-num">3</div>
+            <div class="timeline-body">
+              <h4>Erőforrás tervezés</h4>
+              <p>Stabil csapattal és előre tervezett beosztással dolgozunk, hogy a rendszeres feladatok megbízhatóan teljesüljenek. Nem ad hoc — hanem szervezett, tervezett munkavégzés.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-num">4</div>
+            <div class="timeline-body">
+              <h4>Gépesített kivitelezés</h4>
+              <p>Gépesített megoldásokkal dolgozunk — különösen padlófelületeken, nagytakarításoknál és külső területek kezelésénél. Ipari gőztisztítás, súroló- és fűnyíró gépek, traktor.</p>
+            </div>
+          </div>
+
+          <div class="timeline-item">
+            <div class="timeline-num">5</div>
+            <div class="timeline-body">
+              <h4>Dokumentálás és visszajelzés</h4>
+              <p>Igény szerint dokumentálható módon — rövid riport vagy fotó — visszaigazoljuk az elvégzett munkát. Az együttműködés során folyamatosan elérhetők vagyunk.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="col-lg-4 d-none d-lg-block">
+        <div style="position:sticky; top:88px;">
+          <div style="background:var(--cw-blue-light); border-radius:16px; padding:24px; border:1px solid #B5D4F4; margin-bottom:16px; position:relative;">
+            <div style="font-size: 18px; font-weight:700; color:var(--cw-blue); margin-bottom:10px;">Gyors ajánlatkéréshez szükséges:</div>
+            <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--cw-blue-mid);flex-shrink:0;margin-top:6px;"></div>
+              <span style="font-size: 14px;color:var(--text-secondary);">Helyszín mérete (m²)</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--cw-blue-mid);flex-shrink:0;margin-top:6px;"></div>
+              <span style="font-size: 14px;color:var(--text-secondary);">Kívánt gyakoriság</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start; margin-bottom:8px;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--cw-blue-mid);flex-shrink:0;margin-top:6px;"></div>
+              <span style="font-size: 14px;color:var(--text-secondary);">Érintett szolgáltatás(ok)</span>
+            </div>
+            <div style="display:flex; gap:8px; align-items:flex-start;">
+              <div style="width:6px;height:6px;border-radius:50%;background:var(--cw-blue-mid);flex-shrink:0;margin-top:6px;"></div>
+              <span style="font-size: 14px;color:var(--text-secondary);">Helyszín típusa</span>
+            </div>
+            <a href="cleanway_kapcsolat.html" class="btn-cw-primary mt-4 w-100 justify-content-center" style="font-size:14px; padding:11px 20px;">Ajánlatot kérek →</a>
+            <!-- Szövegbuborék csücsök -->
+            <div style="position:absolute; top:28px; left:-18px; width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-right:18px solid #B5D4F4;"></div>
+            <div style="position:absolute; top:28px; left:-16px; width:0; height:0; border-top:10px solid transparent; border-bottom:10px solid transparent; border-right:16px solid var(--cw-blue-light);"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RENDKÍVÜLI HELYZETEK -->
+<section class="emergency-section">
+  <div class="container">
+    <div class="row g-4 align-items-center">
+      <div class="col-lg-6">
+        <p class="section-label">Rugalmasság</p>
+        <h2 class="section-title">Rendkívüli helyzetek</h2>
+        <p class="section-sub mb-4">Szükség esetén gyorsan reagálunk rendkívüli helyzetekre is. A feladatot a vállalt szinten teljesítjük, a helyszín működéséhez igazítva.</p>
+        <a href="cleanway_kapcsolat.html" class="btn-cw-primary">Kapcsolatfelvétel →</a>
+      </div>
+      <div class="col-lg-6">
+        <div class="emergency-card">
+          <div class="emergency-badge">Mikor számíthat ránk?</div>
+          <div class="emergency-item"><span class="emergency-dot"></span><span>Extra terhelés, váratlan igény esetén</span></div>
+          <div class="emergency-item"><span class="emergency-dot"></span><span>Időjárási feladatok — hó, jég, síkosság</span></div>
+          <div class="emergency-item"><span class="emergency-dot"></span><span>Váratlan szennyeződés, baleseti helyzet</span></div>
+          <div class="emergency-item"><span class="emergency-dot"></span><span>Rendezvény előtti vagy utáni gyors takarítás</span></div>
+          <div class="emergency-item" style="margin-bottom:0;"><span class="emergency-dot"></span><span>Felújítást követő alapos tisztítás</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="kapcsolat">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Kérjen ajánlatot — 24 órán belül visszajelzünk</h2>
+          <p class="mt-2">Adja meg a helyszín paramétereit — mi elküldjük az árat. Ha helyszíni bejárás szükséges, azt követően rövid határidővel készítjük el a végleges árazást.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <a href="cleanway_kapcsolat.html" class="btn-cta-white">Ajánlatot kérek →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 footer-brand mb-2 mb-md-0">
+        <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:36px; width:auto;">
+      </div>
+      <div class="col-md-4 text-center footer-contact mb-2 mb-md-0">
+        <a href="mailto:info@cwsgroup.hu" class="me-3">info@cwsgroup.hu</a>
+        <a href="tel:+36305907975">+36 30 590 7975</a>
+      </div>
+      <div class="col-md-4 text-md-end footer-copy">
+        © 2026 CleanWay Solutions
+        <div class="mt-1" style="font-size:12px; color:var(--text-hint);">Made and supported by <a href="https://www.simpleweb.hu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; vertical-align:middle; text-decoration:none;"><img src="SimpleWeb_logo.svg" alt="SimpleWeb" style="height:28px; width:auto; margin-left:6px;"></a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

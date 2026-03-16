@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanWay Solutions — Köszönjük megkeresését!</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  :root {
+    --cw-blue:        #02378F;
+    --cw-blue-mid:    #0185E4;
+    --cw-blue-light:  #E8F2FD;
+    --cw-green:       #006E46;
+    --cw-green-mid:   #5DB327;
+    --cw-green-bg:    #EDF7E6;
+    --cw-gray:        #5A6068;
+    --cw-gray-light:  #F2F3F4;
+    --cw-gray-mid:    #E2E4E6;
+    --text-primary:   #111827;
+    --text-secondary: #4B5563;
+    --text-hint:      #9CA3AF;
+  }
+  html { overflow-x: hidden; }
+  body { font-family: 'Inter', sans-serif; background-color: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* NAV */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); min-height: 64px; position: sticky; top: 0; z-index: 1030; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; position: relative; }
+  .nav-link:not(.btn-nav-cta)::after { content: ''; position: absolute; bottom: -4px; left: 16px; right: 16px; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .nav-link:not(.btn-nav-cta):hover::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  @media (max-width: 991.98px) {
+    .navbar { min-height: 64px; }
+    .navbar-collapse { background: var(--cw-blue); border-radius: 0 0 16px 16px; padding: 8px 0 16px; margin: 0 -12px; }
+    .navbar-collapse .navbar-nav { padding: 0 8px; }
+    .navbar-collapse .nav-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar-collapse .nav-item:last-of-type { border-bottom: none; }
+    .navbar-collapse .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 16px !important; font-weight: 500; padding: 14px 16px !important; display: block; }
+    .navbar-collapse .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    .navbar-collapse .nav-link:not(.btn-nav-cta)::after { display: none; }
+    .navbar-collapse .btn-nav-cta { background: var(--cw-green-mid) !important; color: #fff !important; margin: 12px 16px 0; padding: 14px 22px !important; font-size: 16px !important; border-radius: 8px; text-align: center; display: block; width: calc(100% - 32px); }
+    .navbar-collapse .btn-nav-cta:hover { background: var(--cw-green) !important; transform: none; }
+    .navbar-toggler { border: none; padding: 8px; }
+    .navbar-toggler:focus { box-shadow: none; }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2302378F' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  }
+
+  /* THANK YOU */
+  .thankyou-section { padding: 80px 0; }
+  .thankyou-card { background: #fff; border-radius: 24px; padding: 56px 48px; text-align: center; max-width: 600px; margin: 0 auto; border: 1px solid var(--cw-gray-mid); }
+  .thankyou-icon { width: 80px; height: 80px; background: var(--cw-green-bg); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; }
+  .thankyou-icon svg { width: 40px; height: 40px; }
+  .thankyou-card h1 { font-size: 32px; font-weight: 800; color: var(--cw-green); margin-bottom: 16px; }
+  .thankyou-card .lead { font-size: 18px; color: var(--text-secondary); margin-bottom: 12px; }
+  .thankyou-card .phone-link { color: var(--cw-green); font-weight: 600; text-decoration: none; font-size: 18px; }
+  .thankyou-card .phone-link:hover { color: var(--cw-green-mid); }
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+
+  /* FOOTER */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+  .footer-contact a { color: var(--text-secondary); text-decoration: none; font-size: 14px; position: relative; transition: color .2s; }
+  .footer-contact a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="cleanway_fooldal.html">
+      <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:46px; width:auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="cleanway_rolunk.html">Rólunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_szolgaltatasok.html">Szolgáltatások</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_hogyan.html">Hogyan dolgozunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_kinek.html">Kinek ajánljuk?</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_geppark.html">Géppark</a></li>
+      </ul>
+      <a href="cleanway_kapcsolat.html" class="nav-link btn-nav-cta ms-2">Ajánlatot kérek →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- THANK YOU -->
+<section class="thankyou-section">
+  <div class="container">
+    <div class="thankyou-card">
+      <div class="thankyou-icon">
+        <svg viewBox="0 0 28 28" fill="none"><path d="M5 14L11 20L23 8" stroke="#5DB327" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+      <h1>Köszönjük megkeresését!</h1>
+      <p class="lead">Az üzenetét megkaptuk. 24 órán belül visszajelzünk — ha szükséges, egyeztetünk a helyszíni bejárásról is.</p>
+      <p style="font-size:16px; color:var(--text-secondary); margin-bottom:32px;">Addig is elérhet minket: <a href="tel:+36305907975" class="phone-link">+36 30 590 7975</a></p>
+      <a href="cleanway_fooldal.html" class="btn-cw-primary">Vissza a főoldalra →</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 footer-brand mb-2 mb-md-0">
+        <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:36px; width:auto;">
+      </div>
+      <div class="col-md-4 text-center footer-contact mb-2 mb-md-0">
+        <a href="mailto:info@cwsgroup.hu" class="me-3">info@cwsgroup.hu</a>
+        <a href="tel:+36305907975">+36 30 590 7975</a>
+      </div>
+      <div class="col-md-4 text-md-end footer-copy">
+        © 2026 CleanWay Solutions
+        <div class="mt-1" style="font-size:12px; color:var(--text-hint);">Made and supported by <a href="https://www.simpleweb.hu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; vertical-align:middle; text-decoration:none;"><img src="SimpleWeb_logo.svg" alt="SimpleWeb" style="height:28px; width:auto; margin-left:6px;"></a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

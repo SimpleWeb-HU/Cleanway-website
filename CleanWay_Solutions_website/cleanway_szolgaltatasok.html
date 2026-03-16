@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanWay Solutions — Szolgáltatások</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+
+
+  /* ── SHARED BRAND VARIABLES ── */
+  :root {
+    --cw-blue:        #02378F;
+    --cw-blue-mid:    #0185E4;
+    --cw-blue-light:  #E8F2FD;
+    --cw-green:       #006E46;
+    --cw-green-mid:   #5DB327;
+    --cw-green-light: #96CC22;
+    --cw-green-bg:    #EDF7E6;
+    --cw-gray:        #5A6068;
+    --cw-gray-light:  #F2F3F4;
+    --cw-gray-mid:    #E2E4E6;
+    --text-primary:   #111827;
+    --text-secondary: #4B5563;
+    --text-hint:      #9CA3AF;
+  }
+  html { overflow-x: hidden; }
+  body { font-family: 'Inter', sans-serif; background-color: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* ── NAV ── */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; position: relative; }
+  .nav-link:not(.btn-nav-cta)::after { content: ''; position: absolute; bottom: -4px; left: 16px; right: 16px; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .nav-link:not(.btn-nav-cta):hover::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* Mobil nav */
+  @media (max-width: 991.98px) {
+    .navbar { min-height: 64px; }
+    .navbar-collapse { background: var(--cw-blue); border-radius: 0 0 16px 16px; padding: 8px 0 16px; margin: 0 -12px; }
+    .navbar-collapse .navbar-nav { padding: 0 8px; }
+    .navbar-collapse .nav-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar-collapse .nav-item:last-of-type { border-bottom: none; }
+    .navbar-collapse .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 16px !important; font-weight: 500; padding: 14px 16px !important; display: block; }
+    .navbar-collapse .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    .navbar-collapse .nav-link:not(.btn-nav-cta)::after { display: none; }
+    .navbar-collapse .nav-link.active { color: #fff !important; font-weight: 700; }
+    .navbar-collapse .btn-nav-cta { background: var(--cw-green-mid) !important; color: #fff !important; margin: 12px 16px 0; padding: 14px 22px !important; font-size: 16px !important; border-radius: 8px; text-align: center; display: block; width: calc(100% - 32px); }
+    .navbar-collapse .btn-nav-cta:hover { background: var(--cw-green) !important; transform: none; }
+    .navbar-toggler { border: none; padding: 8px; }
+    .navbar-toggler:focus { box-shadow: none; }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2302378F' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  }
+
+  /* ── SHARED COMPONENTS ── */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* Buttons */
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+  .btn-cw-ghost { color: var(--cw-blue); background: transparent; border: 2px solid transparent; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; padding: 11px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; transition: gap .2s, border-color .2s, background .2s; }
+  .btn-cw-ghost:hover { gap: 10px; color: var(--cw-blue); border-color: var(--cw-blue); background: transparent; }
+
+
+  /* Footer */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+
+  /* Mobil responsive */
+  @media (max-width: 767.98px) {
+    .section-title { font-size: 24px; }
+    .cta-banner { padding: 28px 20px; border-radius: 16px; }
+    .cta-banner h2 { font-size: 24px; }
+    .cta-banner p { font-size: 14px; }
+    .cta-banner::before, .cta-banner::after { display: none; }
+    .site-footer .row { text-align: center; }
+    .footer-contact { margin: 8px 0; }
+    .footer-contact a { display: block; margin: 0 0 4px !important; }
+  }
+  @media (max-width: 575.98px) {
+    .btn-cw-primary, .btn-cw-ghost { font-size: 16px; padding: 11px 20px; }
+  }
+
+  
+  body { font-family: 'Inter', sans-serif; background: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* NAV */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .navbar-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-way   { color: var(--cw-green-mid); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-sol   { color: var(--cw-gray); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; margin-left: 3px; vertical-align: middle; font-family: 'Montserrat', sans-serif; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* SHARED */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* PAGE HERO */
+  .page-hero { background: var(--cw-gray-light); padding: 64px 0 48px; }
+  .page-hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--cw-green-bg); border-radius: 100px; padding: 5px 14px; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: var(--cw-green); }
+  .page-hero-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cw-green-mid); }
+  .page-hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+  .page-hero p { font-size: 18px; color: var(--text-secondary); line-height: 1.75; max-width: 580px; }
+
+  /* FILTER PILLS */
+  .filter-bar { background: #fff; border-bottom: 1px solid var(--cw-gray-mid); padding: 16px 0; position: sticky; top: 64px; z-index: 1019; }
+  .filter-pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 18px; border-radius: 100px; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .2s; border: 1.5px solid transparent; text-decoration: none; }
+  .filter-pill.active { background: var(--cw-blue); color: #fff; border-color: #fff; }
+  .filter-pill.inactive { background: #fff; color: var(--text-secondary); border-color: var(--cw-gray-mid); }
+  .filter-pill.inactive:hover { border-color: var(--cw-blue-mid); color: var(--cw-blue); }
+
+  /* GROUP HEADER */
+  .group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+  .group-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .group-dot.green { background: var(--cw-green-mid); }
+  .group-dot.blue  { background: var(--cw-blue-mid); }
+  .group-title { font-size: 18px; font-weight: 800; color: var(--text-primary); margin: 0; }
+
+  /* SERVICE CARDS — belső (függőleges) */
+  .svc-card-v { background: #fff; border-radius: 16px; border: 1.5px solid transparent; overflow: hidden; transition: border-color .2s, transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: block; height: 100%; }
+  .svc-card-v:hover { border-color: var(--cw-blue-mid); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(1,133,228,0.10); color: inherit; }
+  .svc-card-v-img { height: 160px; overflow: hidden; }
+  .svc-card-v-body { padding: 20px; }
+  .svc-card-v-body h5 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .svc-card-v-body p  { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px; }
+  .svc-link { font-size: 12px; font-weight: 600; color: var(--cw-blue-mid); text-decoration: none; display: inline-flex; align-items: center; gap: 4px; }
+
+  /* SERVICE CARDS — külső (vízszintes) */
+  .svc-card-h { background: #fff; border-radius: 16px; border: 1.5px solid transparent; overflow: hidden; transition: border-color .2s, transform .2s, box-shadow .2s; text-decoration: none; color: inherit; display: grid; grid-template-columns: 180px 1fr; height: 100%; }
+  .svc-card-h:hover { border-color: var(--cw-blue-mid); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(1,133,228,0.10); color: inherit; }
+  .svc-card-h-img { overflow: hidden; }
+  .svc-card-h-body { padding: 24px; }
+  .svc-card-h-body h5 { font-size: 16px; font-weight: 700; margin-bottom: 6px; }
+  .svc-card-h-body p  { font-size: 14px; color: var(--text-secondary); line-height: 1.55; margin-bottom: 14px; }
+
+  /* SECTIONS */
+  .group-section { padding: 56px 0; }
+  .group-section.white { background: #fff; }
+  .group-section.gray  { background: var(--cw-gray-light); }
+
+  /* CTA */
+  .cta-banner::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  .cta-banner h2 { font-size: 28px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+
+  /* ── CTA BANNER ── */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner {
+    background: var(--cw-blue);
+    border-radius: 24px;
+    padding: 52px 56px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+  .cta-banner::after {
+    content: '';
+    position: absolute; bottom: -80px; right: 100px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+  .btn-cta-white {
+    background: var(--cw-green-mid); color: #fff;
+    border: 2px solid #fff; border-radius: 8px;
+    padding: 14px 30px; font-size: 16px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, transform .15s, box-shadow .15s;
+    position: relative; z-index: 2;
+  }
+  .btn-cta-white:hover { background: var(--cw-green); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+  /* FOOTER */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+  .footer-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+  .footer-brand .brand-way { color: var(--cw-green-mid); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="cleanway_fooldal.html">
+      <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:46px; width:auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="cleanway_rolunk.html">Rólunk</a></li>
+        <li class="nav-item"><a class="nav-link active" href="cleanway_szolgaltatasok.html">Szolgáltatások</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_hogyan.html">Hogyan dolgozunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_kinek.html">Kinek ajánljuk?</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_geppark.html">Géppark</a></li>
+      </ul>
+      <a href="cleanway_kapcsolat.html" class="nav-link btn-nav-cta ms-2">Ajánlatot kérek →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow"><span class="page-hero-eyebrow-dot"></span>Szolgáltatásaink</div>
+    <h1>Belső takarítás és külső<br>területkarbantartás — <span style="color:var(--cw-blue);">egy kézből</span></h1>
+    <p>Minden szolgáltatásunkat előre egyeztetett ütemezéssel, gépesített megoldásokkal és stabil kapacitással végezzük. Válasszon az alábbi területek közül.</p>
+  </div>
+</section>
+
+<!-- FILTER BAR -->
+<div class="filter-bar">
+  <div class="container">
+    <div class="d-flex gap-2 flex-wrap">
+      <a href="#osszes" class="filter-pill active">Összes</a>
+      <a href="#belso" class="filter-pill inactive">Belső takarítás</a>
+      <a href="#kulso" class="filter-pill inactive">Külső területek</a>
+    </div>
+  </div>
+</div>
+
+<!-- BELSŐ TAKARÍTÁS -->
+<section class="group-section white" id="belso">
+  <div class="container">
+    <div class="group-header">
+      <span class="group-dot green"></span>
+      <h2 class="group-title">Belső takarítás</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_rendszeres.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Rendszeres_Takaritas.webp" alt="Rendszeres takarítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Rendszeres takarítás</h5>
+            <p>Heti / több alkalmas ütemezéssel, a helyszín igényeihez igazítva.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_higieniai.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Kiemelt-Higieniai.webp" alt="Kiemelt higiéniai takarítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Kiemelt higiéniai takarítás</h5>
+            <p>Vizesblokkok, WC-k, szociális helyiségek rendszeres kezelése.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_nagytakaritas.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Idoszakos_Nagytakaritas.webp" alt="Időszakos nagytakarítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Időszakos nagytakarítás</h5>
+            <p>Szezonális vagy eseti nagytakarítás — felújítás után, események előtt.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_padlo.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Gepi_padlo.webp" alt="Gépi padlótisztítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Gépi padlótisztítás</h5>
+            <p>Járólap, beton, műgyanta jellegű felületek ipari géppel.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_uveg.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Uvaeg.webp" alt="Üveg- és felülettisztítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Üveg- és felülettisztítás</h5>
+            <p>Kirakat, bejárati üveg, belső üvegfelületek elérhető magasságig.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <a href="cleanway_svc_ozon.html" class="svc-card-v">
+          <div class="svc-card-v-img"><img src="Ozon.webp" alt="Ózonos szagkezelés" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-v-body">
+            <h5>Ózonos szagkezelés</h5>
+            <p>Higiéniai kiegészítő kezelés nagytakarítást követően, igény szerint.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KÜLSŐ TERÜLETEK -->
+<section class="group-section gray" id="kulso">
+  <div class="container">
+    <div class="group-header">
+      <span class="group-dot blue"></span>
+      <h2 class="group-title">Külső területek</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-6">
+        <a href="cleanway_svc_terulet.html" class="svc-card-h">
+          <div class="svc-card-h-img"><img src="Teruletkarbantartas.webp" alt="Területkarbantartás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-h-body">
+            <h5>Területkarbantartás</h5>
+            <p>Fűnyírás, szegélyvágás, szemétszedés, gyommentesítés permetezéssel. A terület adottságaihoz igazított gépesített megoldásokkal.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-6">
+        <a href="cleanway_svc_ho.html" class="svc-card-h">
+          <div class="svc-card-h-img"><img src="Hoeltakaritas.webp" alt="Hóeltakarítás" style="width:100%;height:100%;object-fit:cover;"></div>
+          <div class="svc-card-h-body">
+            <h5>Hóeltakarítás</h5>
+            <p>Síkosságmentesítés, sózás — gyors reagálással, traktorral és kézi eszközökkel. Rendkívüli időjárási helyzetekben is megbízhatóan.</p>
+            <span class="svc-link">Részletek →</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="kapcsolat">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Kérjen ajánlatot — 24 órán belül visszajelzünk</h2>
+          <p class="mt-2">Adja meg a helyszín paramétereit — mi elküldjük az árat. Ha helyszíni bejárás szükséges, azt követően rövid határidővel készítjük el a végleges árazást.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <a href="cleanway_kapcsolat.html" class="btn-cta-white">Ajánlatot kérek →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 footer-brand mb-2 mb-md-0">
+        <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:36px; width:auto;">
+      </div>
+      <div class="col-md-4 text-center footer-contact mb-2 mb-md-0">
+        <a href="mailto:info@cwsgroup.hu" class="me-3">info@cwsgroup.hu</a>
+        <a href="tel:+36305907975">+36 30 590 7975</a>
+      </div>
+      <div class="col-md-4 text-md-end footer-copy">
+        © 2026 CleanWay Solutions
+        <div class="mt-1" style="font-size:12px; color:var(--text-hint);">Made and supported by <a href="https://www.simpleweb.hu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; vertical-align:middle; text-decoration:none;"><img src="SimpleWeb_logo.svg" alt="SimpleWeb" style="height:28px; width:auto; margin-left:6px;"></a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
