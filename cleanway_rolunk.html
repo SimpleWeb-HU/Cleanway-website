@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanWay Solutions — Rólunk</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+  /* ── VARIABLES ── */
+  :root {
+    --cw-blue:        #02378F;
+    --cw-blue-mid:    #0185E4;
+    --cw-blue-light:  #E8F2FD;
+    --cw-green:       #006E46;
+    --cw-green-mid:   #5DB327;
+    --cw-green-bg:    #EDF7E6;
+    --cw-gray:        #5A6068;
+    --cw-gray-light:  #F2F3F4;
+    --cw-gray-mid:    #E2E4E6;
+    --text-primary:   #111827;
+    --text-secondary: #4B5563;
+    --text-hint:      #9CA3AF;
+  }
+
+  html { overflow-x: hidden; }
+  body { font-family: 'Inter', sans-serif; background-color: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* ── NAV ── */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; position: relative; }
+  .nav-link:not(.btn-nav-cta)::after { content: ''; position: absolute; bottom: -4px; left: 16px; right: 16px; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .nav-link:not(.btn-nav-cta):hover::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* Mobil nav */
+  @media (max-width: 991.98px) {
+    .navbar { min-height: 64px; }
+    .navbar-collapse { background: var(--cw-blue); border-radius: 0 0 16px 16px; padding: 8px 0 16px; margin: 0 -12px; }
+    .navbar-collapse .navbar-nav { padding: 0 8px; }
+    .navbar-collapse .nav-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar-collapse .nav-item:last-of-type { border-bottom: none; }
+    .navbar-collapse .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 16px !important; font-weight: 500; padding: 14px 16px !important; display: block; }
+    .navbar-collapse .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    .navbar-collapse .nav-link:not(.btn-nav-cta)::after { display: none; }
+    .navbar-collapse .nav-link.active { color: #fff !important; font-weight: 700; }
+    .navbar-collapse .btn-nav-cta { background: var(--cw-green-mid) !important; color: #fff !important; margin: 12px 16px 0; padding: 14px 22px !important; font-size: 16px !important; border-radius: 8px; text-align: center; display: block; width: calc(100% - 32px); }
+    .navbar-collapse .btn-nav-cta:hover { background: var(--cw-green) !important; transform: none; }
+    .navbar-toggler { border: none; padding: 8px; }
+    .navbar-toggler:focus { box-shadow: none; }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2302378F' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  }
+
+  /* ── SHARED ── */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+  .btn-cw-ghost { color: var(--cw-blue); background: transparent; border: 2px solid transparent; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; padding: 11px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; transition: gap .2s, border-color .2s; }
+  .btn-cw-ghost:hover { gap: 10px; color: var(--cw-blue); border-color: var(--cw-blue); }
+
+  /* ── PAGE HERO ── */
+  .page-hero { background: var(--cw-gray-light); padding: 48px 0; overflow: hidden; }
+  .page-hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--cw-green-bg); border-radius: 100px; padding: 5px 14px; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: var(--cw-green); }
+  .page-hero-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cw-green-mid); }
+  .page-hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 16px; }
+  .page-hero p { font-size: 18px; color: var(--text-secondary); line-height: 1.75; max-width: 520px; }
+  .hero-img-frame { background: #fff; border-radius: 20px; border: 1px solid var(--cw-gray-mid); overflow: hidden; height: 100%; min-height: 320px; display: flex; align-items: stretch; }
+
+  /* ── STAT CARDS ── */
+  .stat-card { border-radius: 14px; border: 1px solid var(--cw-gray-mid); padding: 20px 22px; text-align: center; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+  .stat-card-val { font-family: 'Montserrat', sans-serif; font-size: 28px; font-weight: 800; color: var(--cw-blue); line-height: 1; margin-bottom: 4px; }
+  .stat-card-lbl { font-size: 12px; color: var(--text-hint); font-weight: 500; }
+
+  /* ── SECTIONS ── */
+  .about-section { background: #fff; padding: 48px 0; }
+  .benefits-section { background: #fff; padding: 48px 0; }
+  .benefit-card {
+    background: var(--cw-gray-light); border-radius: 14px;
+    padding: 22px 24px; display: flex; gap: 14px; align-items: center;
+    border: 1.5px solid transparent; transition: border-color .2s; height: 100%;
+  }
+  .benefit-card:hover { border-color: var(--cw-green-mid); }
+  .benefit-check {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: var(--cw-green-bg); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .benefit-check svg { width: 26px; height: 26px; }
+  .benefit-card h6 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .benefit-card p { font-size: 14px; color: var(--text-secondary); line-height: 1.5; margin: 0; }
+
+  /* ── GÉPPARK ── */
+  .machinery-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .machinery-img-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .machinery-img-item { border-radius: 12px; overflow: hidden; min-height: 160px; }
+
+  /* ── CTA BANNER ── */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner {
+    background: var(--cw-blue);
+    border-radius: 24px;
+    padding: 52px 56px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+  .cta-banner::after {
+    content: '';
+    position: absolute; bottom: -80px; right: 100px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+
+  /* ── CTA BANNER ── */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner {
+    background: var(--cw-blue);
+    border-radius: 24px;
+    padding: 52px 56px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+  .cta-banner::after {
+    content: '';
+    position: absolute; bottom: -80px; right: 100px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+  .btn-cta-white {
+    background: var(--cw-green-mid); color: #fff;
+    border: 2px solid #fff; border-radius: 8px;
+    padding: 14px 30px; font-size: 16px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, transform .15s, box-shadow .15s;
+    position: relative; z-index: 2;
+  }
+  .btn-cta-white:hover { background: var(--cw-green); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+  /* ── FOOTER ── */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+  .footer-contact a { color: var(--text-secondary); text-decoration: none; font-size: 14px; position: relative; transition: color .2s; }
+  .footer-contact a::after { content: ''; position: absolute; bottom: -2px; left: 0; right: 0; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+  .fade-up { animation: fadeUp .5s ease forwards; }
+  .delay-1 { animation-delay: .1s; opacity: 0; }
+  .delay-2 { animation-delay: .2s; opacity: 0; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 991.98px) {
+    .page-hero { padding: 36px 0; }
+    .page-hero h1 { font-size: 32px; }
+    .about-section, .benefits-section, .machinery-section, .cta-section { padding: 36px 0; }
+    .cta-banner { padding: 36px 28px; }
+    .cta-banner h2 { font-size: 24px; }
+    .cta-banner::before, .cta-banner::after { display: block; }
+    /* Hero: kép felülre, kifuttatva jobbra */
+    .page-hero .container { padding-right: 0 !important; overflow: visible; }
+    .page-hero .container .row { margin-right: 0 !important; }
+    .col-lg-6.order-1 { padding-right: 0 !important; }
+    .hero-img-wrapper { padding-right: 0 !important; margin-top: -36px !important; }
+    .hero-img-frame {
+      border-radius: 0 0 20px 24px !important;
+      border-right: none !important;
+      border-top: none !important;
+    }
+  }
+
+  @media (max-width: 767.98px) {
+    .page-hero h1 { font-size: 28px; }
+    .page-hero p { font-size: 16px; }
+    .section-title { font-size: 24px; }
+    .about-section, .benefits-section, .machinery-section, .cta-section { padding: 28px 0; }
+    .machinery-img-grid { grid-template-columns: 1fr 1fr; }
+    .machinery-img-item:nth-child(3) { display: none; }
+    .cta-banner { padding: 28px 20px; border-radius: 16px; }
+    .cta-banner h2 { font-size: 24px; }
+    .cta-banner p { font-size: 14px; }
+    .cta-banner::before, .cta-banner::after { display: none; }
+    .cta-banner .btn-cta-white { width: 100%; justify-content: center; }    .site-footer .row { text-align: center; }
+    .footer-contact { margin: 8px 0; }
+    .footer-contact a { display: block; margin: 0 0 4px !important; }
+    /* Mobilon jobb alsó sarok is 0 */
+    .hero-img-frame { border-radius: 0 0 0 24px !important; }
+  }
+
+  @media (max-width: 575.98px) {
+    .page-hero h1 { font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="cleanway_fooldal.html">
+      <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:46px; width:auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link active" href="cleanway_rolunk.html">Rólunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_szolgaltatasok.html">Szolgáltatások</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_hogyan.html">Hogyan dolgozunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_kinek.html">Kinek ajánljuk?</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_geppark.html">Géppark</a></li>
+      </ul>
+      <a href="cleanway_kapcsolat.html" class="nav-link btn-nav-cta ms-2">Ajánlatot kérek →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="row align-items-stretch g-5">
+      <div class="col-lg-6 fade-up order-2 order-lg-1">
+        <div class="page-hero-eyebrow">
+          <span class="page-hero-eyebrow-dot"></span>
+          Rólunk
+        </div>
+        <h1>Takarítás és területkarbantartás — <span style="color:var(--cw-blue);">stabil csapattal</span></h1>
+        <p>A CleanWay Solutions vállalkozásoknak és intézményeknek nyújt professzionális takarítási és területkarbantartási szolgáltatást. Ahol a tisztaság és rendezettség a működés része.</p>
+      </div>
+      <div class="col-lg-6 fade-up delay-2 order-1 order-lg-2 pe-0 pe-lg-3">
+        <div class="hero-img-frame hero-img-wrapper">
+          <img src="1773521901802_Csapat.webp" alt="CleanWay Solutions csapat" style="width:100%; height:100%; object-fit:cover; display:block;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÉGBEMUTATÓ -->
+<section class="about-section">
+  <div class="container">
+    <div class="row g-5 align-items-stretch">
+      <div class="col-lg-6">
+        <p class="section-label">Cégbemutató</p>
+        <h2 class="section-title">Kik vagyunk?</h2>
+        <p style="font-size:16px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">Takarítási és külső területkarbantartási szolgáltató. Olyan vállalkozásoknak és intézményeknek dolgozunk, ahol a tisztaság és a rendezettség a működés része — ezért a szolgáltatásunkat előre egyeztetett ütemezésre, stabil kapacitásra és egységes munkafolyamatokra építjük.</p>
+        <p style="font-size:16px; color:var(--text-secondary); line-height:1.8; margin-bottom:16px;">Szükség esetén gyorsan reagálunk rendkívüli helyzetekre is — extra terhelés, időjárási feladatok, váratlan szennyeződés. A munkavégzést helyszínre szabott feladatlistával és ellenőrzési pontokkal szervezzük, így a minőség kiszámítható és követhető.</p>
+        <p style="font-size:16px; color:var(--text-secondary); line-height:1.8;">Szolgáltatási területünk elsősorban Pest megye, igény esetén regionálisan bővíthető.</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="row g-3 h-100">
+          <div class="col-6">
+            <div class="stat-card" style="background: var(--cw-green-bg);">
+              <div class="stat-card-val">Pest megye</div>
+              <div class="stat-card-lbl">elsődleges terület</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card" style="background: var(--cw-blue-light);">
+              <div class="stat-card-val">24 h</div>
+              <div class="stat-card-lbl">ajánlatadás</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card" style="background: var(--cw-blue-light);">
+              <div class="stat-card-val">B2B</div>
+              <div class="stat-card-lbl">vállalkozás + intézmény</div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="stat-card" style="background: var(--cw-green-bg);">
+              <div class="stat-card-val">8+</div>
+              <div class="stat-card-lbl">szolgáltatás egy kézből</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MŰKÖDÉSI ELŐNYÖK -->
+<!-- GÉPPARK TEASER -->
+<section class="machinery-section">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-5">
+        <p class="section-label">Gépparkunk</p>
+        <h2 class="section-title">Modern gépesítés — megbízható kivitelezés</h2>
+        <p style="font-size:16px; color:var(--text-secondary); line-height:1.75; margin-bottom:16px;">A zöldfelületek karbantartását fűnyíró traktorral és szegélyvágó eszközökkel végezzük a terület adottságaihoz igazítva.</p>
+        <p style="font-size:16px; color:var(--text-secondary); line-height:1.75; margin-bottom:28px;">A mélytisztítási feladatoknál ipari gőztisztító gépet is alkalmazunk. Az ózonos kezelést nagytakarítást követően, igény szerint végezzük.</p>
+        <a href="cleanway_geppark.html" class="btn-cw-primary">Gépparkunk →</a>
+      </div>
+      <div class="col-lg-7">
+        <div class="machinery-img-grid">
+          <div class="machinery-img-item large">
+            <img src="Traktor.webp" alt="Fűnyíró traktor" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+          </div>
+          <div class="machinery-img-item">
+            <img src="Surologep.webp" alt="Ipari súroló gép" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+          </div>
+          <div class="machinery-img-item">
+            <img src="Goztisztito.webp" alt="Gőztisztító" style="width:100%; height:100%; object-fit:cover; border-radius:12px;">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="benefits-section">
+  <div class="container">
+    <div class="row mb-4">
+      <div class="col-lg-8">
+        <p class="section-label">Miért minket?</p>
+        <h2 class="section-title">A megbízhatóságot nem ígérjük<br>— működésbe hozzuk</h2>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Ellenőrizhető minőség</h6>
+            <p>Egységes folyamatok, fotós/írásos visszaigazolás igény szerint.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Kiszámítható teljesítés</h6>
+            <p>Rendszeres, tervezett munkavégzés a megbeszélt gyakorisággal.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Komplex szolgáltatás</h6>
+            <p>Belső takarítás + külső területek + szezonális feladatok — egy kézből.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Gyors ügyintézés</h6>
+            <p>Ismert paraméterek alapján 24 órán belüli ajánlatadás.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Hatékony gépesítés</h6>
+            <p>Gépi megoldások padló- és nagytakarításhoz, ipari gőztisztítás.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="benefit-card">
+          <div class="benefit-check">
+            <svg viewBox="0 0 13 13" fill="none"><path d="M2 6.5L5.5 10L11 3" stroke="#5DB327" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </div>
+          <div>
+            <h6>Rugalmas megoldások</h6>
+            <p>Rendkívüli igények kezelése a helyszín működéséhez igazítva.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<section class="cta-section" id="kapcsolat">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Kérjen ajánlatot — 24 órán belül visszajelzünk</h2>
+          <p class="mt-2">Adja meg a helyszín paramétereit — mi elküldjük az árat. Ha helyszíni bejárás szükséges, azt követően rövid határidővel készítjük el a végleges árazást.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <a href="cleanway_kapcsolat.html" class="btn-cta-white">Ajánlatot kérek →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 footer-brand mb-2 mb-md-0">
+        <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:36px; width:auto;">
+      </div>
+      <div class="col-md-4 text-center footer-contact mb-2 mb-md-0">
+        <a href="mailto:info@cwsgroup.hu" class="me-3">info@cwsgroup.hu</a>
+        <a href="tel:+36305907975">+36 30 590 7975</a>
+      </div>
+      <div class="col-md-4 text-md-end footer-copy">
+        © 2026 CleanWay Solutions
+        <div class="mt-1" style="font-size:12px; color:var(--text-hint);">Made and supported by <a href="https://www.simpleweb.hu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; vertical-align:middle; text-decoration:none;"><img src="SimpleWeb_logo.svg" alt="SimpleWeb" style="height:28px; width:auto; margin-left:6px;"></a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

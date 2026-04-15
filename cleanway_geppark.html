@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CleanWay Solutions — Gépparkunk</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+
+  /* ── SHARED BRAND VARIABLES ── */
+  :root {
+    --cw-blue:        #02378F;
+    --cw-blue-mid:    #0185E4;
+    --cw-blue-light:  #E8F2FD;
+    --cw-green:       #006E46;
+    --cw-green-mid:   #5DB327;
+    --cw-green-light: #96CC22;
+    --cw-green-bg:    #EDF7E6;
+    --cw-gray:        #5A6068;
+    --cw-gray-light:  #F2F3F4;
+    --cw-gray-mid:    #E2E4E6;
+    --text-primary:   #111827;
+    --text-secondary: #4B5563;
+    --text-hint:      #9CA3AF;
+  }
+  html { overflow-x: hidden; }
+  body { font-family: 'Inter', sans-serif; background-color: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; line-height: 1.5; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* ── NAV ── */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; position: relative; }
+  .nav-link:not(.btn-nav-cta)::after { content: ''; position: absolute; bottom: -4px; left: 16px; right: 16px; height: 2px; background: var(--cw-blue); border-radius: 2px; transform: scaleX(0); transition: transform .2s ease; }
+  .nav-link:not(.btn-nav-cta):hover::after { transform: scaleX(1); }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* Mobil nav */
+  @media (max-width: 991.98px) {
+    .navbar { min-height: 64px; }
+    .navbar-collapse { background: var(--cw-blue); border-radius: 0 0 16px 16px; padding: 8px 0 16px; margin: 0 -12px; }
+    .navbar-collapse .navbar-nav { padding: 0 8px; }
+    .navbar-collapse .nav-item { border-bottom: 1px solid rgba(255,255,255,0.1); }
+    .navbar-collapse .nav-item:last-of-type { border-bottom: none; }
+    .navbar-collapse .nav-link { color: rgba(255,255,255,0.85) !important; font-size: 16px !important; font-weight: 500; padding: 14px 16px !important; display: block; }
+    .navbar-collapse .nav-link:hover { color: #fff !important; background: rgba(255,255,255,0.1); border-radius: 8px; }
+    .navbar-collapse .nav-link:not(.btn-nav-cta)::after { display: none; }
+    .navbar-collapse .nav-link.active { color: #fff !important; font-weight: 700; }
+    .navbar-collapse .btn-nav-cta { background: var(--cw-green-mid) !important; color: #fff !important; margin: 12px 16px 0; padding: 14px 22px !important; font-size: 16px !important; border-radius: 8px; text-align: center; display: block; width: calc(100% - 32px); }
+    .navbar-collapse .btn-nav-cta:hover { background: var(--cw-green) !important; transform: none; }
+    .navbar-toggler { border: none; padding: 8px; }
+    .navbar-toggler:focus { box-shadow: none; }
+    .navbar-toggler-icon { background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='%2302378F' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e"); }
+  }
+
+  /* ── SHARED COMPONENTS ── */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-family: 'Montserrat', sans-serif; font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+
+  /* Buttons */
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+  .btn-cw-ghost { color: var(--cw-blue); background: transparent; border: 2px solid transparent; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; padding: 11px 20px; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; border-radius: 8px; transition: gap .2s, border-color .2s, background .2s; }
+  .btn-cw-ghost:hover { gap: 10px; color: var(--cw-blue); border-color: var(--cw-blue); background: transparent; }
+
+  /* Footer */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+
+  /* Mobil responsive */
+  @media (max-width: 767.98px) {
+    .section-title { font-size: 24px; }
+    .cta-banner { padding: 28px 20px; border-radius: 16px; }
+    .cta-banner h2 { font-size: 24px; }
+    .cta-banner p { font-size: 14px; }
+    .cta-banner::before, .cta-banner::after { display: none; }
+    .site-footer .row { text-align: center; }
+    .footer-contact { margin: 8px 0; }
+    .footer-contact a { display: block; margin: 0 0 4px !important; }
+  }
+  @media (max-width: 575.98px) {
+    .btn-cw-primary, .btn-cw-ghost { font-size: 16px; padding: 11px 20px; }
+  }
+
+  
+  body { font-family: 'Inter', sans-serif; background: var(--cw-gray-light); color: var(--text-primary); -webkit-font-smoothing: antialiased; }
+  h1,h2,h3,h4,h5,h6 { font-family: 'Montserrat', sans-serif; line-height: 1.5; }
+
+  /* NAV */
+  .navbar { background: rgba(255,255,255,0.95) !important; backdrop-filter: blur(10px); border-bottom: 1px solid var(--cw-gray-mid); position: sticky; top: 0; z-index: 1030; min-height: 64px; }
+  .navbar-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-way   { color: var(--cw-green-mid); font-weight: 800; font-size: 20px; font-family: 'Montserrat', sans-serif; }
+  .navbar-brand .brand-sol   { color: var(--cw-gray); font-size: 10px; font-weight: 700; letter-spacing: 2.5px; margin-left: 3px; vertical-align: middle; font-family: 'Montserrat', sans-serif; }
+  .nav-link { color: var(--text-secondary) !important; font-size: 14px; font-weight: 500; padding: 0 16px !important; transition: color .2s; }
+  .nav-link:hover { color: var(--cw-blue) !important; }
+  .nav-link.active { color: var(--cw-blue) !important; font-weight: 600; }
+  .btn-nav-cta { background: var(--cw-blue); color: #fff !important; border-radius: 8px; padding: 9px 22px !important; font-size: 14px; font-weight: 600; transition: background .2s, transform .15s; white-space: nowrap; }
+  .btn-nav-cta:hover { background: var(--cw-blue-mid) !important; color: #fff !important; transform: translateY(-1px); }
+
+  /* SHARED */
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; color: var(--cw-green); text-transform: uppercase; margin-bottom: 8px; }
+  .section-title { font-size: 32px; font-weight: 800; color: var(--text-primary); margin-bottom: 12px; line-height: 1.2; }
+  .section-sub { font-size: 16px; color: var(--text-secondary); line-height: 1.7; }
+  .btn-cw-primary { background: var(--cw-blue); color: #fff; border: none; border-radius: 8px; padding: 13px 28px; font-size: 16px; font-weight: 600; font-family: 'Inter', sans-serif; transition: background .2s, transform .15s; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+  .btn-cw-primary:hover { background: var(--cw-blue-mid); color: #fff; transform: translateY(-2px); }
+
+  /* PAGE HERO */
+  .page-hero { background: var(--cw-gray-light); padding: 64px 0 48px; }
+  .page-hero-eyebrow { display: inline-flex; align-items: center; gap: 7px; background: var(--cw-blue-light); border-radius: 100px; padding: 5px 14px; margin-bottom: 16px; font-size: 12px; font-weight: 600; color: var(--cw-blue-mid); }
+  .page-hero-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--cw-blue-mid); }
+  .page-hero h1 { font-size: 40px; font-weight: 800; line-height: 1.15; margin-bottom: 14px; }
+  .page-hero p { font-size: 18px; color: var(--text-secondary); line-height: 1.75; max-width: 520px; }
+  .hero-img-frame { background: #fff; border-radius: 20px; border: 1px solid var(--cw-gray-mid); overflow: hidden; height: 100%; min-height: 300px; }
+  .img-placeholder { width: 100%; height: 100%; min-height: 300px; background: linear-gradient(135deg, #dce8f7 0%, #e4f2e8 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: var(--text-hint); font-size: 14px; }
+
+  /* GROUP HEADER */
+  .group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--cw-gray-mid); }
+  .group-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .group-dot.green { background: var(--cw-green-mid); }
+  .group-dot.blue  { background: var(--cw-blue-mid); }
+  .group-title { font-size: 20px; font-weight: 800; color: var(--text-primary); margin: 0; }
+
+  /* MACHINE CARDS */
+  .machine-section { padding: 48px 0; }
+  .machine-section.white { background: #fff; }
+  .machine-section.gray  { background: var(--cw-gray-light); }
+  .machine-card { background: #fff; border-radius: 18px; overflow: hidden; border: 1.5px solid transparent; transition: border-color .2s, transform .2s, box-shadow .2s; height: 100%; }
+  .machine-section.gray .machine-card { background: var(--cw-gray-light); }
+  .machine-card:hover { border-color: var(--cw-blue-mid); transform: translateY(-4px); box-shadow: 0 12px 32px rgba(1,133,228,0.10); }
+  .machine-card-img { height: 180px; overflow: hidden; } .machine-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .machine-section.gray .machine-card-img { background: linear-gradient(135deg, #e8f0f8 0%, #eaf5e8 100%); }
+  .machine-card-body { padding: 20px 22px; }
+  .machine-card-body h5 { font-size: 16px; font-weight: 800; margin-bottom: 6px; }
+  .machine-card-body p { font-size: 14px; color: var(--text-secondary); line-height: 1.6; margin: 0; }
+
+  /* WHY MACHINES */
+  .why-section { background: var(--cw-blue); padding: 48px 0; }
+  .why-card { background: rgba(255,255,255,0.10); border-radius: 16px; padding: 24px; border: 1px solid rgba(255,255,255,0.15); height: 100%; transition: background .2s; }
+  .why-card:hover { background: rgba(255,255,255,0.16); }
+  .why-icon { width: 112px; height: 112px; border-radius: 16px; background: #fff; display: flex; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .why-card h5 { font-size: 16px; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .why-card p { font-size: 14px; color: rgba(255,255,255,0.75); line-height: 1.6; margin: 0; }
+
+  /* CTA */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner { background: var(--cw-blue); border-radius: 24px; padding: 52px 56px; position: relative; overflow: hidden; }
+  .cta-banner::before { content: ''; position: absolute; top: -60px; right: -60px; width: 260px; height: 260px; border-radius: 50%; background: rgba(255,255,255,0.05); }
+  .cta-banner h2 { font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 8px; }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+
+
+  /* ── CTA BANNER ── */
+  .cta-section { background: var(--cw-gray-light); padding: 48px 0; }
+  .cta-banner {
+    background: var(--cw-blue);
+    border-radius: 24px;
+    padding: 52px 56px;
+    position: relative; overflow: hidden;
+  }
+  .cta-banner::before {
+    content: '';
+    position: absolute; top: -60px; right: -60px;
+    width: 260px; height: 260px; border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    pointer-events: none;
+  }
+  .cta-banner::after {
+    content: '';
+    position: absolute; bottom: -80px; right: 100px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+    pointer-events: none;
+  }
+  .cta-banner h2 {
+    font-size: 32px; font-weight: 800; color: #fff; margin-bottom: 10px;
+  }
+  .cta-banner p { font-size: 16px; color: rgba(255,255,255,0.8); margin: 0; }
+  .btn-cta-white {
+    background: var(--cw-green-mid); color: #fff;
+    border: 2px solid #fff; border-radius: 8px;
+    padding: 14px 30px; font-size: 16px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    white-space: nowrap; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: background .2s, transform .15s, box-shadow .15s;
+    position: relative; z-index: 2;
+  }
+  .btn-cta-white:hover { background: var(--cw-green); color: #fff; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.15); }
+
+  /* FOOTER */
+  .site-footer { background: #fff; border-top: 1px solid var(--cw-gray-mid); padding: 28px 0; }
+  .footer-brand .brand-clean { color: var(--cw-blue); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+  .footer-brand .brand-way { color: var(--cw-green-mid); font-weight: 800; font-family: 'Montserrat', sans-serif; }
+    .footer-contact a {
+    color: var(--text-secondary); text-decoration: none; font-size: 14px;
+    position: relative; transition: color .2s;
+  }
+  .footer-contact a::after {
+    content: ''; position: absolute; bottom: -2px; left: 0; right: 0;
+    height: 2px; background: var(--cw-blue); border-radius: 2px;
+    transform: scaleX(0); transition: transform .2s ease;
+  }
+  .footer-contact a:hover { color: var(--cw-blue); }
+  .footer-contact a:hover::after { transform: scaleX(1); }
+  .footer-copy { font-size: 12px; color: var(--text-hint); }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="cleanway_fooldal.html">
+      <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:46px; width:auto;">
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav mx-auto">
+        <li class="nav-item"><a class="nav-link" href="cleanway_rolunk.html">Rólunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_szolgaltatasok.html">Szolgáltatások</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_hogyan.html">Hogyan dolgozunk</a></li>
+        <li class="nav-item"><a class="nav-link" href="cleanway_kinek.html">Kinek ajánljuk?</a></li>
+        <li class="nav-item"><a class="nav-link active" href="cleanway_geppark.html">Géppark</a></li>
+      </ul>
+      <a href="cleanway_kapcsolat.html" class="nav-link btn-nav-cta ms-2">Ajánlatot kérek →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<section class="page-hero">
+  <div class="container">
+    <div class="row align-items-center g-5">
+      <div class="col-lg-6">
+        <div class="page-hero-eyebrow"><span class="page-hero-eyebrow-dot"></span>Gépparkunk</div>
+        <h1>Modern gépesítés — <span style="color:var(--cw-blue);">kiszámítható minőség</span></h1>
+        <p>Gépesített megoldásokkal dolgozunk padlófelületeken, nagytakarításoknál és külső területek kezelésénél egyaránt. A gépek gyorsabb munkavégzést és egységesebb eredményt biztosítanak.</p>
+      </div>
+      <div class="col-lg-6">
+        <div class="hero-img-frame">
+          <img src="Geppark.webp" alt="Gépparkunk" style="width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- KÜLSŐ GÉPEK -->
+<section class="machine-section white">
+  <div class="container">
+    <div class="group-header">
+      <span class="group-dot blue"></span>
+      <h2 class="group-title">Külső területek</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Traktor_2.webp" alt="Fűnyíró traktor"></div>
+          <div class="machine-card-body">
+            <h5>Fűnyíró traktor</h5>
+            <p>Nagyobb zöldfelületek gyors és egységes karbantartásához. A terület adottságaihoz igazítva, John Deere X530 géppel.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Fukasza.webp" alt="Szegélyvágó"></div>
+          <div class="machine-card-body">
+            <h5>Szegélyvágó</h5>
+            <p>Járdaszegélyek, kerítések, akadályok melletti területek precíz kezelésére. Kézi és gépi változatban.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Plato.webp" alt="Szállítás és mobilitás"></div>
+          <div class="machine-card-body">
+            <h5>Szállítás és mobilitás</h5>
+            <p>Saját jármű a csapat és az eszközök helyszínre juttatásához, rugalmas kiszállással Pest megye egész területén.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- BELSŐ GÉPEK -->
+<section class="machine-section gray">
+  <div class="container">
+    <div class="group-header">
+      <span class="group-dot green"></span>
+      <h2 class="group-title">Belső takarítás</h2>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Surologep2.webp" alt="Ipari súroló gép"></div>
+          <div class="machine-card-body">
+            <h5>Ipari súroló gép</h5>
+            <p>Járólap, beton, műgyanta padlófelületek mélytisztítására. Egységes eredmény nagy felületeken, rövid idő alatt.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Goztisztito2.webp" alt="Ipari gőztisztító"></div>
+          <div class="machine-card-body">
+            <h5>Ipari gőztisztító</h5>
+            <p>Mélytisztítási feladatokhoz, különösen higiéniai szempontból kiemelt helyeken — vizesblokkok, burkolatok, felületek.</p>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="machine-card">
+          <div class="machine-card-img"><img src="Ozon_2.webp" alt="Ózongenerátor"></div>
+          <div class="machine-card-body">
+            <h5>Ózongenerátor</h5>
+            <p>Higiéniai szagkezelés nagytakarítást követően, igény szerint alkalmazva. Hatékonyan eltávolítja a kellemetlen szagokat.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MIÉRT SZÁMÍT A GÉPESÍTÉS -->
+<section class="why-section">
+  <div class="container">
+    <div class="row mb-5">
+      <div class="col-lg-7">
+        <p class="section-label" style="color:rgba(255,255,255,0.6);">Miért számít?</p>
+        <h2 class="section-title" style="color:#fff;">A gépesítés előnyei</h2>
+        <p class="section-sub" style="color:rgba(255,255,255,0.75);">Nem csak gyorsabb — megbízhatóbb és kiszámíthatóbb eredményt is ad.</p>
+      </div>
+    </div>
+    <div class="row g-3">
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" style="flex-shrink:0;" id="Színtáradatok_réteg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 700 700">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st3 {
+        fill: url(#linear-gradient5);
+      }
+
+      .st4 {
+        fill: url(#linear-gradient4);
+      }
+
+      .st5 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="350" y1="640.78" x2="350" y2="-97.69" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#02378f"/>
+      <stop offset="1" stop-color="#0185e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="234.3" y1="640.78" x2="234.3" y2="-97.69" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient2" x1="462.67" y1="640.78" x2="462.67" y2="-97.69" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient3" x1="350.45" y1="640.78" x2="350.45" y2="-97.69" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient4" x1="350.21" y1="640.78" x2="350.21" y2="-97.69" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient5" x1="350.75" y1="640.78" x2="350.75" y2="-97.69" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="st5" d="M463.32,466.78c-72.1,41.7-160.4,39.17-230.43-4.99-58.6-36.94-94.65-97.24-97.88-167.07-2.74-59.32,21.19-115.94,64.19-156.47,81.46-76.79,209.75-79.05,293.66-5.67,46.02,40.24,72.97,98.16,72.32,159.46-.77,73.62-38.11,137.87-101.86,174.74ZM416.56,467.05c78.66-25.36,130.09-96.96,130.37-179.07.19-56.38-22.76-110.23-65.47-147.67-39.38-34.52-89.76-52.27-142.45-49.54-104.33,5.39-187.79,88.25-185.14,194.67,1.69,68.02,38.09,129.59,96.89,163.5,50.15,28.92,110.4,35.97,165.8,18.11Z"/>
+  <path class="st1" d="M275.09,618.39l-48.31-52.74-72.52,23.86c-2.31.76-6.11-.49-7.53-1.7-1.99-1.7-2.87-5.09-2.29-8.23l47.65-131.29c36.63,33.86,81.44,54.26,132.25,60.11l-34.96,107.39c-.84,2.59-4.17,4.37-6.04,4.9-2.4.68-6.18-.04-8.25-2.3Z"/>
+  <path class="st0" d="M423.72,615.32c-2.7,2.99-5.88,5.03-9.18,4.71-2.71-.27-6.69-2.39-7.79-5.74l-34.67-104.98c50.51-4.58,97.79-23.69,135.48-58.86l45.44,129.16c.9,2.55-.48,6.32-1.93,7.77s-5.52,3.03-8.17,2.15l-73.99-24.32-45.19,50.11Z"/>
+  <path class="st2" d="M363.31,463.14c-52.83,2.67-103.78-15.93-140.99-52.5-47.51-46.69-66.19-115.41-47.02-179.5,12.64-42.26,41.55-77.72,79.33-100.47,59.08-35.58,134.44-34.93,192.78,1.78,46.67,29.36,78.07,78.03,84.41,132.92,11.85,102.62-64.34,192.49-168.51,197.76ZM486.46,360.66c16.78-28.15,23.41-60.8,20-93.11-9.01-85.35-85.12-147.09-170.38-139.83-86.9,7.39-152.22,82.64-141.89,170.42,6.89,58.58,47.24,108.4,102.71,128.24,71.52,25.59,150.68-.47,189.56-65.72Z"/>
+  <path class="st4" d="M408.79,407.7c-42.62,18.52-91.73,15.16-131.21-8.47-49.93-29.88-76.32-88.76-63.78-145.47,15.65-70.76,83.45-116.1,154.71-106.54,62.72,8.41,112.52,57.89,120.19,121,7.18,59.01-24.91,115.57-79.92,139.48ZM473.06,265.63c-6.33-53.73-47.59-96.18-100.5-105.96-57.97-10.71-115.9,20.21-138.07,75.16-17.79,44.09-6.57,94.73,26.77,128.5,23.65,23.95,54.91,37.2,88.83,37.28,73.1.17,131.64-61.33,122.97-134.99Z"/>
+  <path class="st3" d="M268.79,297.88c-5.98-5.74-9.7-13.18-4.16-20.5,2.63-3.48,6.74-7.25,10.21-10.36,5.74-5.15,13.8-4.57,19.63.17l22.59,18.36,15.66,12.26,42.13-42.33,33.29-33.35c3.83-3.84,6.93-7.32,12.21-7.67s9.92,1.99,13.43,5.27c8.28,7.73,7.08,16.8.37,24.88l-76.08,91.72c-4.07,4.91-7.69,9.3-11.89,13.78-6.34,6.75-16.11,6.58-22.81.15l-54.59-52.38Z"/>
+</svg></div>
+          <h5>Egységes minőség</h5>
+          <p>Gépi munkavégzéssel az eredmény kiszámítható és reprodukálható — nem függ az egyéni teljesítménytől.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" style="flex-shrink:0;" id="Színtáradatok_réteg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 700 700">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st3 {
+        fill: url(#linear-gradient6);
+      }
+
+      .st4 {
+        fill: url(#linear-gradient7);
+      }
+
+      .st5 {
+        fill: url(#linear-gradient5);
+      }
+
+      .st6 {
+        fill: url(#linear-gradient4);
+      }
+
+      .st7 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="390.49" y1="604.93" x2="390.49" y2="108.28" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#02378f"/>
+      <stop offset="1" stop-color="#0185e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="146.43" y1="604.93" x2="146.43" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient2" x1="467.19" y1="604.93" x2="467.19" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient3" x1="192.89" y1="604.93" x2="192.89" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient4" x1="236.11" y1="604.93" x2="236.11" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient5" x1="254.05" y1="604.93" x2="254.05" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient6" x1="471.37" y1="604.93" x2="471.37" y2="108.28" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient7" x1="534" y1="604.93" x2="534" y2="108.28" xlink:href="#linear-gradient"/>
+  </defs>
+  <path class="st7" d="M387.54,537.8c-76.71-42.72-122.29-132.09-94.67-218.63l-142.01-5.7c-3.48-.11-44.97-1.95-42.9-6.21.4-.83,2.24-2.62,3.41-2.75,11.29-1.26,23.78-2.57,36.04-3.28,62.74-3.62,92.16-5.8,155.21-6.61,12.49-25.07,29.74-45.81,51.92-63.43l-8.28-12.69-8.87,5.21c-3.37,1.98-7.79,1.2-10.04-2.12l-9.84-14.5c-1.16-1.71-1.41-5.7-.51-7.96.71-1.79,3.57-3.4,5.78-4.8l31.17-19.83c2.63-1.67,8.24-3,10.38,0l11,15.48c2.09,2.93,3.58,7.16-.51,9.81l-10.6,6.86,8.2,12.19c26.9-16.56,56.6-26.01,88.1-28.51,88.55-7.04,171.38,45.02,201.82,128.6,16.1,44.21,14.07,93.73-5.85,136.73-24.83,53.62-76.96,93.34-134.92,104.12-46.27,8.6-92.92.93-134.04-21.97ZM626.49,439.99c6.47-13.17,10.02-26.7,12.43-41.15,12.82-76.65-31.89-147.98-101.5-176.78-65.05-26.91-140.1-11.03-187.55,40.69-31.44,34.26-45.89,79.61-40.02,126.07,7.32,57.91,45.96,106.61,98.51,129.81,82.31,36.33,178.22,2.6,218.13-78.64Z"/>
+  <path class="st1" d="M58.6,377.14l-28.65-2.63c-.94-.09-3.07-1.54-3.05-2.47s2.15-2.71,3.46-2.86c16.06-1.83,33.16-3.64,50.27-4.2l185.33-7.1c-1.31,9.35-1.34,17.78-.96,27.02l-64.96-2.12-141.44-5.64Z"/>
+  <path class="st0" d="M485.53,185.7l-35.21.64-.69-9.79-14.25.12c-5.19.04-9.3-2.92-9.3-8.55l-.02-23.35c0-4.24,2.76-7.9,7.47-7.9l67.64-.05c3.61,0,7.11,3.53,7.11,6.86l.03,24.56c0,4.1-2.39,8.1-7.14,8.14l-15.16.14-.48,9.18Z"/>
+  <path class="st2" d="M209.27,438.38l-93-5.86c-3.4-.16-5.94-.66-8.4-3.95,6.62-1.91,11.64-2.58,18.12-3.02,59-3.98,84.81-5.7,144.53-6.42l7.4,21.04-68.65-1.79Z"/>
+  <path class="st6" d="M214.05,477.13c-6.7-.21-39.5-1.99-42.79-5.01-.47-.43,1.6-2.12,2.24-2.18l31.74-2.7,83.9-3.85,11.91,17.53-86.99-3.79Z"/>
+  <path class="st5" d="M213.71,260.72c-6.52-.45-16.56-1.24-19.57-4.06-2.74-2.57,6.84-4.73,9.67-4.82l110.62-3.84-14.58,17.41c-39.8-.57-46.07-1.9-86.15-4.68Z"/>
+  <path class="st3" d="M366.07,374.46c-10.02.93-18.83.58-28.24.65.86,28.08,11.39,54.21,29.26,75.95l10.1-7.83c2.14.71,6.01,4.02,6.27,6.24-1.19,4.39-4.29,7.64-7.74,11.27,23.48,25.76,61.44,41.98,96.12,44.1l.14-22.21c.02-3.18,2.09-5.61,5.15-6.4,2.25-.58,6.73,1.44,6.75,4.49l.12,24.24c49.68-.25,92.91-25.33,122.59-63.69-31.36,61.02-101.94,89.27-167.8,72.31-81.12-20.9-133.74-106.01-107.15-188.11,18.58-57.37,70.06-96.41,129.8-101.22,50.77-4.09,99.47,18.21,130.73,58.43,13.26,17.06,22.45,36.64,25.92,57.69-8.44-23.87-21.9-43.93-40.39-60.61l-8.7,11.89c-.65.88-3.04,1.68-3.99,1.37-6.08-1.98,6.69-14.49,9.16-16.33-25.79-24.24-58.9-38.32-94.33-40.72l-.39,21.26c-.05,2.48-3.88,4.7-6.07,4.4-2.9-.41-5.32-3.13-5.4-6.32l-.51-19.35c-37.01,2.44-70.64,17.71-95.29,44.37,3.77,3.64,7.38,6.93,10.34,10.68.55,2.12-3.29,6.01-5.65,6.28-3.93-2.39-8.04-5.72-11.85-8.75-17.44,21.41-26.34,47.12-27.53,74.36l24.3.23c2.53.02,5.2,1.72,6.32,3.5s.92,7.57-2.01,7.85Z"/>
+  <path class="st4" d="M612.62,376.24l-113.33,10.46c-4.87,7.96-12.37,12.27-21.33,12.66-8.51.38-16.36-3.67-21.85-11.17-5.86-8.02-6.22-18.74-1.12-27.65,4.53-7.91,13.57-12.8,23.84-12.29l45.65-54.7c2.14-2.57,4.31-4.53,7.45-4.31,2.35.17,6.57,4.13,5.2,6.96l-28.23,58.17,60.32,7.76c13.99,1.8,27.17,2.82,41.42,3.23,2.57.3,4.94,1.82,5.71,3.84.7,1.85-.25,6.71-3.73,7.03ZM476.43,385.37c6.3.29,10.21-4.41,11.3-8.68,1.48-5.8-1.24-10.65-5.81-13.06s-10.08-1.7-13.59,2.3c-3.12,3.56-3.65,8.49-1.67,13.09,1.26,2.94,5.17,6.14,9.77,6.35Z"/>
+</svg></div>
+          <h5>Gyorsabb kivitelezés</h5>
+          <p>Nagyobb felületek rövidebb idő alatt — kevesebb zavarás a helyszín napi működésében.</p>
+        </div>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="why-card">
+          <div class="why-icon"><?xml version="1.0" encoding="UTF-8"?>
+<svg width="96" height="96" style="flex-shrink:0;" id="Színtáradatok_réteg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" viewBox="0 0 700 700">
+  <!-- Generator: Adobe Illustrator 30.2.1, SVG Export Plug-In . SVG Version: 2.1.1 Build 1)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: url(#linear-gradient2);
+      }
+
+      .st1 {
+        fill: url(#linear-gradient1);
+      }
+
+      .st2 {
+        fill: url(#linear-gradient3);
+      }
+
+      .st3 {
+        fill: url(#linear-gradient6);
+      }
+
+      .st4 {
+        fill: url(#linear-gradient8);
+      }
+
+      .st5 {
+        fill: url(#linear-gradient7);
+      }
+
+      .st6 {
+        fill: url(#linear-gradient5);
+      }
+
+      .st7 {
+        fill: url(#linear-gradient4);
+      }
+
+      .st8 {
+        fill: url(#linear-gradient);
+      }
+    </style>
+    <linearGradient id="linear-gradient" x1="325.58" y1="667.17" x2="360.01" y2="-216.62" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#02378f"/>
+      <stop offset="1" stop-color="#0185e4"/>
+    </linearGradient>
+    <linearGradient id="linear-gradient1" x1="664.69" y1="680.39" x2="699.12" y2="-203.41" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient2" x1="636.57" y1="679.29" x2="671" y2="-204.5" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient3" x1="511.89" y1="674.43" x2="546.32" y2="-209.36" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient4" x1="545.58" y1="675.75" x2="580.01" y2="-208.05" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient5" x1="467.58" y1="672.71" x2="502.02" y2="-211.08" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient6" x1="426.93" y1="671.12" x2="461.36" y2="-212.67" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient7" x1="194.32" y1="662.06" x2="228.75" y2="-221.73" xlink:href="#linear-gradient"/>
+    <linearGradient id="linear-gradient8" x1="97.63" y1="658.29" x2="132.07" y2="-225.5" xlink:href="#linear-gradient"/>
+  </defs>
+  <g id="gmF8ft">
+    <g>
+      <path class="st8" d="M592.47,457.02c13.62,3.65,31.06,7.06,38.38,19.79,3.18,5.54,2.28,11.57,2.19,17.8,6.31,7.37,15.38,13.42,20.6,20.78,3.98,5.62,2.44,12.73-2.83,16.85-4.85,3.78-10.25,6.57-16.27,8.55-32.78,10.8-68.52,11.82-103.37,8.37-1.51,4.86-4.05,8.78-8.23,11.56-15.38,10.21-43.93,14.9-62.49,16.29-31.47,2.35-62.63-.32-93.24-7.8-10.57-2.59-28.3-8.3-34.51-17.45-14.59,6.08-29.24,6.69-44.58,3.89-37.48-6.85-73.78-17.26-108.8-32-10.93-4.6-5.73-14.43-4.12-23.01-38.12,2.35-75.7.92-113.28-4.77-8.62-1.3-68-10.31-50.19-27.35,13.41-8.61,32.99-10.08,49.2-12.54-3.8-15.13-3.89-29.8,1.61-44.45-8.22-3.59-12.49-10.47-13.23-18.87l.07-33.63c.02-7.41,4.88-12.94,11.79-15.68-5.71-9.15-4.61-25.62-3.88-37.13,1.77-27.83,5.94-55.1,13.67-81.76,3.45-11.89,11.45-20.78,22.51-25.5l.23-13.62c.13-7.81,5.12-14.04,12.5-16.47s15.38-2.24,23.4-1.74c5.83.37,11.4.98,16.7,4.16-.15-8.68-.35-16.67,1.64-24.69,5.88-23.74,29.77-24.45,50.05-24.42,10.67.01,21.03.14,31.3,2.43,17.62,3.93,23.38,17.35,27.77,33.23l11.66,42.19,19.87,2.95c7.32,1.09,14.49,2.9,21.24,5.54,10.78,4.22,16.84,14.23,15.75,25.66-.63,6.63-3.71,11.84-9.22,15.63-1.14,1.69-.36,5.83,1.02,7.61,6.94,8.91,11.46,18.82,12.91,30.06l4.13,32.07c.49,3.83,1.66,7.42,3.11,11.06.9-7.75.99-14.55.92-22.1l-.58-58.48c-.16-15.9,8.85-29.49,22.78-36.6.2-1.89-1.12-4.47-2.76-5.8-17.85,2.67-40.18,2.64-55.3-8.07-8.73-6.19-13.05-15.62-9.61-26.16,1.71-5.24,4.94-10.11,9.14-13.91,10.87-9.86,23.43-16.5,37.37-21.16,20.44-6.82,47.58-11.9,67.8-3.08,12.06,5.26,16.81,18.43,11.23,30.39-3.68,7.88-9.96,13.77-17.25,18.59-1.51,1-3.08,2.5-4.08,3.82l8.2,13.68c28.78-1.72,54.65-3.62,80.13,11.06,15.31,8.82,29.1,18.76,42.95,29.76,23.46,18.64,50.2,42.72,60.46,71.49,5.34,14.97,7.9,29.99,9.23,45.62,6.74,2.88,11.19,8.14,11.96,15.35,1.11,10.36.97,20.63.94,31.21-.06,19.02,1.97,33.97-18.2,41.69l-.38,9.13ZM223.81,224.19l20.06,3.9c10.31,2,42.84-2.65,54.56-4.59,3.53-.59,6.53-1.6,9.94-3.77-6.1-3.51-12.1-4.87-18.69-5.95l-25.92-4.25c-3.07-.5-5.62-5.51-6.41-8.41l-12.57-46.11c-.85-3.1-2.35-6.08-3.61-8.98-2.94-6.76-8.88-10.78-16.34-11.89-16.39-2.44-32.93-2.32-49.38-.08-7.98,1.09-13.29,7.13-13.66,15.36-.89,20.2,3.42,48.67,14.4,66.09,2.41,3.82,7.21,7.2,11.53,8.56,10.77,3.38,21.21,5.96,32.13,8.48,8.22,1.9,15.25,5.11,21.56,10.89,2.11,1.93,6.78,3.69,8.64.92,1.99-2.97-.86-6.81-3.61-8.52-10.77-6.7-25.16-6.12-22.66-11.65ZM404.47,155.06c4.36,9.93-17.95,20.91-16.51,21.94l2.1,1.5c7.72-2.94,15.02-8.95,18.81-16.54,3.4-6.82,1.41-14.26-5.68-17.6-6.69-3.16-14.24-4.12-21.98-3.85-20.45.71-40.12,6.18-57.87,16.1-9.53,5.33-23.79,15.68-20.22,27.48,4.62,15.27,38.73,17.46,51.71,13.83.27-1.34-1.31-2.59-2.6-2.5-9.56.66-37.02,3.35-39.9-9.29-.79-3.47.2-7.06,2.32-9.68,19.98-24.71,84.24-34.11,89.83-21.38ZM391.87,159.43c-9.76-1.39-18.21-.02-27.44,2.39l5.98,9.67c5.95,1.16,18.48-7.01,21.45-12.07ZM350.69,181.48c2.84-.99,4.68-4.09,6.35-5.96l-8.51-8.9c-8.4,3.03-15.98,7.02-22.64,12.77-5.96,5.14,18.14,4.41,24.79,2.09ZM120.82,182.81l20.2.42c4.44-8.17-24.01-6.49-27.79-5.96-9.69,1.37-9.84,12.11-8.79,19.66.17,1.24,3.91,1.54,4.89.82,3.26-2.39.74-7.97,4.31-12.28,1.2-1.44,4.61-2.71,7.18-2.66ZM393.96,203.49l-10.33-18.1c-3.53-4.86-9.08-6.75-14.76-4.26-2.58,1.13-5.11,4.39-3.68,7.45,3.03,6.51,6.27,12.37,10.13,18.94l18.65-4.02ZM146,195.78c.75-.06,2.25-1.19,2.29-1.84s-1.68-2.06-2.49-2.06c-7.73.05-16.96.21-25.07.87-1.3.11-1.12,4.78-.05,4.91l25.32-1.89ZM112.85,348.64l100.17,19.05c1.33.25,3.28-.13,3.86-.86.49-.61,1.09-2.55,1.04-3.45-1.29-20.61-4.32-40.42-9.07-60.39-5.09-21.42-21-28.45-39.95-33.94l-33.58-9.75c-12.29-3.57-22.95-12.91-22.19-26.22,1.5-26.27,38.97-24.27,37.63-27.74-.26-.68-.91-2.18-1.45-3.38-6.61-.27-13.76.6-20.43,2.2l-16.41,3.94c-4.57,1.1-9.79-.92-14.56.45-7.43,2.13-13.22,8.95-15.7,16.6-7.13,21.94-10.9,44.35-12.68,67.58.37,7.29,41.16,17.46,48.29,19.37,1.6.43,3.14,3.02,2.94,4.29-.18,1.14-2.46,2.67-3.95,2.51-16.85-1.75-32.11-6.08-48.31-13.15-.99,9.06-.93,17.21-.2,25.87.22,2.57,2.69,7.2,5.33,7.82l39.22,9.21ZM569.4,317.06c2.54-.87,5.03-2.7,6.77-4.8-5.56-15.35-21.47-32.56-33.4-43.67-18.98-17.68-39.59-32.88-61.89-46.03-13.52-7.97-27.58-11.37-43.32-11.42-21.08-.06-41.73,1.56-61.94,7.41-5,1.45-9.55,2.81-13.92,7.01,12.37,4.79,22.5,10.95,32.18,19.43,24.29,21.27,46.94,53.6,60.01,83.35,1.28,1.52,5.08,2.5,7.24,2.56,34.61.99,75.41-2.65,108.27-13.85ZM243.39,372.95c1.2-.15,2.46-3.16,2.34-4.34-2.5-25.15-5.55-49.63-11.95-73.95-2.89-10.99-9.06-20.74-18.23-27.06-7.75-5.34-16.17-8.94-25.18-11.57l-38.48-11.21c-7.35-2.14-18.33-4.81-18.38-12.53-.05-8.84,13.85-11.06,20.83-12.79.97-.24.49-2.51-.15-2.76-2.73-1.08-27.03,3.08-29.6,15.14-2.25,10.58,6.71,15.58,16.09,18.28l29.22,8.42c24.07,6.94,44.23,16.62,50.24,42.85,4.78,20.88,7.07,41.74,8.97,63.16.2,2.22,1.38,5.47,3.18,6.51,3.17,1.84,7.15,2.35,11.1,1.85ZM281.1,234.36l13.83-1.6c3.88-.45,7.33-1.19,10.71-2.89-4.03-.68-7.23.65-10.92,1.15l-29.96,4.11c5.31,1.53,10.51-.09,16.34-.77ZM363.32,372.85c10.98,2.6,91.59,14.18,93.39,10.82.3-.56.67-2.42.56-3.11-6.86-45.03-28.97-85.21-59.9-118.1-7.99-8.5-16.64-15.51-26.25-21.94-4.14-2.77-8.42-4.59-13.29-6.21-6.79-2.26-10.67,14.27-7.98,17.89l9.57,12.88c15.07,20.29,29.62,79.46,24.82,106.45-2.95,1.65-24.68-2.8-20.93,1.33ZM304.14,252.83c.36-.82-2.26-1.75-3.23-1.5-27.56,6.91-55.04,7.56-83.73,3.88,14.12,6.56,29.59,8.9,44.94,7.88,7.52.17,38.93-3.23,42.02-10.26ZM354.33,370.29c3.44-18.57,4.53-36.59,3.28-55.14-1.25-14.07-3.08-27.62-8.57-40.72v55.87s-2.32,37.81-2.32,37.81c.52,2.38,4.95,3.03,7.61,2.18ZM318.52,285.24c.3-2.79-3.23-4.35-5.55-3.7-11.33,3.14-22.38,5.51-34,7.39-7.86,1.27-15.31,2.48-23.42,4.74,8.69,4.33,62.12-.59,62.97-8.43ZM472.68,385.07c34.74-.75,80.06-5.53,111.84-18.4,1.54-.62,3.08-2.99,2.97-4.71-.94-14-2.99-26.87-7.83-40.12-2.78.64-4.77,1.79-7.15,2.78-31.1,12.86-75.05,15.97-108.39,13.73-1.87-.13-5.29-.34-5.87,1.67,4.45,14.15,8.06,27.61,10.12,42.03.27,1.92,1.82,3.07,4.31,3.02ZM386.09,439.97c19.47,2.88,21.51,18.06,26.79,18.82,13.85,2,27.16,2.63,40.99,2.05,4.52-.19,7.81-3.36,8.08-8.09.62-10.68.53-21.1.16-31.83-.07-2.06-2.19-4.11-4.29-4.24-26.83-1.66-52.84-3.86-79.53-8.38l-111.05-18.8c-65.85-11.15-130.85-24.46-195.95-38.13-6.2-1.3-11.57,5.04-10.45,9.91l32.08,6.63,112.47,22.46c8.4,1.68,13.2,6.13,16.85,13.66,4.4,9.06,10.08,17.45,16.16,25.77,5.27,7.22,12.53,14.11,21.32,16.74,16.22,4.84,32.7,6.91,49.36,9.34,13.99,2.04,7.12-26.24,36.24-21.94l40.78,6.02ZM332.15,358.47c1.28-.48,2.37-3.33,1.39-4.33-1.65-1.68-4.46-2.24-6.64-1.62-21.21,6-34.77,7.44-56.27,12.35,3,2.37,5.94,1.14,9.12,1.17,17.53.18,35.8-1.33,52.4-7.58ZM561.08,396.81c11.81-2.42,22.76-5.67,33.83-9.93,3.12-1.2,5.12-4.02,5.21-6.67.09-2.63-1.46-7.28-4.32-7.22-10.54,4.82-20.34,8.44-31.52,11.17-30.61,7.49-61.56,10.92-93.33,11.83-1.5,3.53-.65,7.72,1.32,10.95,28.79.34,60.71-4.38,88.81-10.13ZM460.31,406.72c2.42-3.85.8-10.42-3.82-10.88l-42-4.11-69.24-10.21c-5.74-.85-10.39,3.75-10.27,9.27,2.41,1,4.54,1.71,7.16,2.17,33.52,5.75,66.72,10.56,100.67,13.45,6.08.52,11.3.62,17.5.32ZM141.5,466.07c4.83-16.24,3.02-33.7-5.07-48.55-10.55-19.36-32.48-31.73-51.64-17.76-7.26,5.3-11.9,13.13-14.16,21.99-6.38,25.02,5.05,56.6,29.95,66.72,17.79,7.23,35.57-4.43,40.92-22.41ZM478.7,459.54c35.04-2.83,78.24-11.01,111.01-22.24,5.76-2.04,9.79-6.84,10.09-13.13.47-9.72.49-19.18.09-29.51-38.31,14.42-83.06,19.58-123.25,21.73-3.1.17-4.57,2-4.5,4.79.28,11.16.19,21.82-.26,32.8-.13,3.26,2.82,5.88,6.82,5.55ZM199.65,415.59c-4.22-2.51-8.41-3.85-12.86-5.02l-30.51-8.03c.29,4.55,3.51,8.48,7.43,9.41,11.82,2.8,23.53,4.89,35.95,3.64ZM195.61,433.32c-7.42-5.48-20.92-8.44-29.86-10.43-.99,5.02,3.02,8.04,7.37,8.96,7.34,1.54,14.69,3.5,22.49,1.47ZM222.91,456.72c-12.37-5.44-24.45-7.38-36.75-10.24l-12.93-3.01c-.54,4.62,2.39,7.59,6.46,8.35,14.3,2.65,28.55,4.93,43.22,4.9ZM580.28,461.53c1.71-2.15,1.53-6.64.98-9.42l-18.72,5.35c-2.09.6-3.13,1.88-3.06,3.91.22,6.38,17.46,2.59,20.8.15ZM398.22,463.28l-2.34-5.09-3.56,1.16c1.52,2.67,2.55,3.76,5.9,3.93ZM449.29,486.32c1.67-1.02,1.97-4.98,2.08-7.24,20.09-.86,39.39-3.41,59.2-6.56,5.6-.89,33.4-4.87,34.84-8.5.25-.63-.08-2.06-.41-2.83-34.75,7.36-67.13,11.63-102.83,13.35-3.11.15-14.57,2.82-15.99,7.4-.4,1.29.24,4.38,1.37,5.09,7.05.98,14.56,1.87,21.76-.7ZM319.14,506.06c3.23-3.47,3.08-20.09,23.07-25.63l37.79-10.48c-4.05-1.99-8.93-4.88-13.65-4.08-10.33,1.75-20.11,4.43-30.13,7.25-15.21,4.27-21.96,18.22-24.1,32.95,1.96.6,5.74,1.37,7.02,0ZM603.42,474.98c-.08-4.1-12.02-6.87-15.12-6.99-2.38,1.58-5.15,3.7-7.78,4.3l-14.8,3.41c-6.56,1.51-12.72,4.28-19.22,7.38,8.52,3.33,57.09,1.4,56.92-8.1ZM521.18,495.95c1.46,2.61,4.67,4.08,7.53,4.79,19.54,4.82,39.24,5.07,59.24,2.62,10.57-1.3,20.5-3.55,29.66-8.77,3.88-2.21,5.85-6.41,4.54-10.75s-4.83-7.43-9.05-8.66c1.18,9.76-9.21,14.33-16.77,16.06-22.96,5.26-40.57,4.22-63.94,2.18-3.87-.34-8.24-.12-11.2,2.52ZM321.52,542.98l-1.27-18.81c-.89-11.93-8.47-7.74-22.1-10.8-19.71-4.42-38.74-9.2-58.18-14.72-13.9-3.95-26.68-8.86-40.27-13.7-4.38-1.56-9.78,3.81-9.44,8.38,4.63,2.65,9.57,4.63,14.85,6.57,29.98,11.06,60.52,19.17,91.97,24.84,2.16.39,4.26.45,5.39,1.95.8,1.06,1.14,3.26,1.2,4.88l.48,13.47c6.23,1.12,11.71.5,17.36-2.06ZM303.51,492.93l-24.77-5.3c-4.08-.87-8.81-1.78-13.06-1.65-9.3.3-17.84.98-27.74,2.95,20.44,7.79,41.29,12.16,62.69,16.14,1.43-4.61,2.29-8.04,2.88-12.14ZM476.26,501.23c-.06-4.22-14.63-8.2-18.16-7.73-11.13,7.19-35.07,5.43-46.87.14-3.33.68-20.67,3.41-20.59,6.87.08,3.35,14.91,6.54,18.39,7.16,16.34,2.89,32.68,3.25,49.08.97,3.89-.54,18.21-2.99,18.15-7.4ZM392.37,525.19c26.22,6.89,53.43,7.5,80.07,2.31,6.57-1.28,12.56-3.43,18.09-6.66,5.18-3.02,6.87-8.95,3.52-14.02-1.76-2.66-4.73-4.76-7.66-5.72-.06,5.95-2.64,10.09-7.47,12.5-16.8,8.37-47.87,7.84-66.49,5.67-9.22-1.07-17.71-3.12-26.25-6.59-1.92-.78-4.26-.56-5.14,1-3.04,5.4,6.25,10.17,11.34,11.51ZM645.33,520.79l-19.82-17.79c-2.79.21-5.79,1.88-6.26,4.57l17.36,19.66c3.74-.86,7.37-2.29,8.72-6.44ZM628.44,529.18l-16.48-19.37c-2.53-1.18-6.86.23-7.61,3.11,3.71,7.14,7.86,14.02,13.05,20.19,3.02,1.31,9.15-.31,11.05-3.93ZM599.62,536.63c3.61,1.5,7.4.04,10.39-1.91l-12.65-19.31c-.89-1.36-3.73-1.96-5.18-1.83-1.18.1-3.32,2.41-2.81,3.63l4.55,10.8c1.14,2.7,2.67,7.37,5.7,8.63ZM527.67,528.41c2.52-2.72,8.25-11.79,4.59-13.78-4.59-2.49-7.28,6.4-8.38,10.21-.47,1.62,2.45,5.02,3.79,3.57ZM547.16,537.27c1.55-5.42,6.25-20.54.35-21.83-6.34-1.38-7.53,11.56-7.43,15.23s3.37,7.79,7.08,6.6ZM579.85,538.72c3.42.86,7.82.37,11.09-1.43l-8.56-19.75c-.59-1.36-3.28-2.43-4.57-2.54s-4.12,1.82-3.87,3.26l2.71,15.56c.26,1.48,1.8,4.54,3.2,4.89ZM569.13,538.68c1.09-.33.9-3.68.7-4.7l-2.94-15.35c-.37-1.92-3.14-2.79-4.77-2.69-1.26.07-4.02,1.5-4.14,2.89l-1.38,16.02c-.5,5.79,9.23,4.83,12.51,3.84ZM518.91,548.63c-.04-.58-.76-1.95-1.24-2.37l-19.26-16.74c-2.53,1-4.25,1.89-7.14,3.9l18.62,20.98c2.92.34,9.17-3.64,9.01-5.77ZM365.59,549.62c3.44-3.3,14.94-13.23,11.74-16.72-.78-.86-3.96-1.89-4.97-1.04-4.93,4.19-9.68,8.74-14.36,13.5,1.57,1.8,4.91,5.49,7.59,4.26ZM501.23,556.86c-.03-.49-.52-1.83-.91-2.26l-16.11-17.57c-2-2.18-7.76.13-7.83,2.82,3.79,7.67,8.64,14.45,13.92,21.09,2.8.17,11.09-1.68,10.93-4.08ZM383.83,558.91l10.88-16.2c.78-1.16.54-4.25-.59-4.87-2.47-1.36-5.78-.77-7.62,1.32l-11.15,12.74c-.64.73-.97,3.5-.28,4.1,1.85,1.59,5.89,3.23,8.76,2.91ZM408.26,561.59l5.03-16.89c.24-.82-.21-2.76-.74-3.4-1.23-1.49-6.9-2.63-9.37,1.7l-8.21,14.39c-.52.91-.31,4.02.71,4.46,2.82,1.21,11.25,4.18,12.58-.26ZM482.13,562.5c-4.91-6.6-8.88-12.12-12.9-18.84-1.13-1.88-3.2-3.47-4.97-3.68-1.56-.18-5.82.98-5.74,2.89,1.14,7.43,3.94,13.57,6.77,20.51,1.43,3.51,13.66.66,16.84-.89ZM430.37,565.73c1.2-.22,2.2-3.5,2.14-4.72l-.83-16.59c-.11-2.2-3.76-2.98-5.53-2.87-1.64.11-4.13,1.18-4.64,3.05l-4.28,15.5c-.36,1.31.11,4.55,1.34,4.93,3.56,1.1,7.5,1.48,11.8.7ZM453.6,566.37c1.77-.06,2.93-2.58,2.42-4.08-1.75-5.22-3.19-9.85-4.65-15.12-.73-2.65-2.4-4.98-4.72-5.44-1.68-.33-6.25.19-6.39,2.31-.4,5.82-.42,11.16-.52,16.98-.05,3,2.03,5.71,5.12,5.61l8.73-.27Z"/>
+      <path class="st1" d="M671.23,512.71c-4.38-6.61-.81-14.67-12.33-17.73-2.22-.59-4.12-1.48-6.49-2.98l8.86-2.6c3.16-.93,6.1-3.22,7.21-6.27l3.98-10.91c3.79,7.03,1.13,14.4,9.56,17.82l9.56,3.88c-7.95,3.55-13.69,1.03-17.08,10.06l-3.27,8.73Z"/>
+      <path class="st0" d="M645.04,468.92c-3.71-7.38-1.25-13.73-10.06-17.3l-8.96-3.63,9.84-3.13c2.25-.71,5.47-2.95,6.33-5.18l4.49-11.6c3.45,7.15,1.17,14.51,8.58,17.54l9.84,4.02-9.63,3.19c-8.31,2.75-6.45,9.04-10.41,16.09Z"/>
+      <path class="st2" d="M527.4,180.34c-1.18,2.18-4.48,2.67-6.38,1.76s-3.09-4.1-1.92-6.31l16.93-31.81c.82-1.53,4.64-1.6,6.03-1.14,1.54.51,3.81,3.34,2.67,5.45l-17.34,32.05Z"/>
+      <path class="st7" d="M554.19,205.87c-2.64,1.51-5.89.32-6.97-1.92-.78-1.63-.2-5,1.9-6.21l25-14.38c2.07-1.19,5.17-.83,6.53.62,1.48,1.59,1.59,5.83-.62,7.1l-25.85,14.78Z"/>
+      <path class="st6" d="M494.85,164.19c.51,3.26-1.42,5.83-4.11,6.1-3.63.37-5.19-1.92-5.71-5.32l-4.12-26.72c-.38-2.47,1.27-4.93,3.21-5.48,2.44-.69,5.91.72,6.36,3.6l4.37,27.82Z"/>
+      <path class="st3" d="M463.18,250.94l-16.39,1.1c-9.86.66-17.91-1.99-25.94-7.16l-19.15-12.35c-.89-.58-1.77-2.93-1.67-3.92.11-1.13,1.82-2.78,3.27-3.12,15.9-3.79,46.29-6.57,60.92,1.04,7.82,4.07,14.77,8.71,21.86,14.06.97.73,1.78,3.1,1.56,4.16-.98,4.73-18.8,5.81-24.47,6.19Z"/>
+      <path class="st5" d="M250.89,207.42c-.23,1.12-2.61,2.35-4.18,2.46-15.4,1.08-30.18,2.92-45.27,5.79-4.32,1.94-8.84,1.09-12.18-2.19-8.24-17.88-13.3-36.89-14.07-56.61-.26-6.63,3.59-10.88,9.82-12.49,10.85-2.8,22.25-3.36,33.5-2.18,6.28.66,11.27,4.7,13.66,10.43,2.74,6.57,4.67,13.26,6.66,20.18l8.29,28.85c.47,1.62,2.56,3.72,3.75,5.76Z"/>
+      <path class="st4" d="M117.48,421.39c13.85,14.54,11.85,39.68-1.77,45.06-5.67,2.24-11.09,1.58-15.9-1.28-10.05-5.98-14.95-17.17-14.56-28.96.28-8.59,4.47-17.11,12.71-20.27,6.93-2.66,14.53.21,19.52,5.45ZM107.69,428.73c-.99.21-2.68,1.9-2.98,2.95-2.82,10.02,4.91,20.7,10.01,18.7,6.18-2.43.27-23.22-7.03-21.65Z"/>
+    </g>
+  </g>
+</svg></div>
+          <h5>Nehéz feladatok is megoldhatók</h5>
+          <p>Mélytisztítás, ipari szennyeződés, nagy zöldfelület — amit kézzel nem lehet hatékonyan elvégezni.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="kapcsolat">
+  <div class="container">
+    <div class="cta-banner">
+      <div class="row align-items-center">
+        <div class="col-lg-8">
+          <h2>Kérjen ajánlatot — 24 órán belül visszajelzünk</h2>
+          <p class="mt-2">Adja meg a helyszín paramétereit — mi elküldjük az árat. Ha helyszíni bejárás szükséges, azt követően rövid határidővel készítjük el a végleges árazást.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+          <a href="cleanway_kapcsolat.html" class="btn-cta-white">Ajánlatot kérek →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-md-4 footer-brand mb-2 mb-md-0">
+        <img src="1773521845132_CleanWay_logo_RGB-01.svg" alt="CleanWay Solutions" style="height:36px; width:auto;">
+      </div>
+      <div class="col-md-4 text-center footer-contact mb-2 mb-md-0">
+        <a href="mailto:info@cwsgroup.hu" class="me-3">info@cwsgroup.hu</a>
+        <a href="tel:+36305907975">+36 30 590 7975</a>
+      </div>
+      <div class="col-md-4 text-md-end footer-copy">
+        © 2026 CleanWay Solutions
+        <div class="mt-1" style="font-size:12px; color:var(--text-hint);">Made and supported by <a href="https://www.simpleweb.hu" target="_blank" rel="noopener" style="display:inline-flex; align-items:center; vertical-align:middle; text-decoration:none;"><img src="SimpleWeb_logo.svg" alt="SimpleWeb" style="height:28px; width:auto; margin-left:6px;"></a></div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
